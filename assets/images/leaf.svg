@@ -1,0 +1,13 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Sfondo bianco della foglia (per fare il bordo) -->
+    <path d="M 50 90 C 15 90 10 40 40 15 C 60 0 90 15 90 50 C 90 85 75 90 50 90 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-linejoin="round"/>
+    <!-- Corpo verde della foglia -->
+    <path d="M 50 90 C 15 90 10 40 40 15 C 60 0 90 15 90 50 C 90 85 75 90 50 90 Z" fill="#84C594"/>
+    <!-- Foro della foglia -->
+    <circle cx="65" cy="40" r="8" fill="#F0F6EE" />
+    <!-- Gambo -->
+    <path d="M 50 85 Q 45 95 35 98" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 50 85 Q 45 95 35 98" stroke="#84C594" stroke-width="4" stroke-linecap="round"/>
+    <!-- Venatura centrale -->
+    <path d="M 45 25 Q 55 50 48 80" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+</svg>

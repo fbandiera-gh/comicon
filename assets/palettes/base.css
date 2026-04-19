@@ -1,0 +1,20 @@
+/* File: assets/palettes/base.css */
+:root {
+    /* Palette Animal Crossing Vibe */
+    --bg-color: #F0F6EE; /* Menta/Salvia chiarissimo */
+    --dot-color: #DDEBD9; /* Verde leggermente più scuro per i pois */
+    --card-bg: #FFFAF0; /* Panna/Crema caldissimo */
+    --border-color: #E8DCC4; /* Beige/Legno chiaro */
+    --text-main: #7A5C43; /* Marrone "Legno" per i testi */
+    --text-muted: #A68A73; /* Marrone sbiadito */
+    
+    /* Colori "Frutta" per i fallback avatar */
+    --accent-dante: #FFAAA5; /* Pesca */
+    --accent-erin: #C8B6E2;  /* Uva/Lavanda */
+    --accent-frisk: #FFD3B6; /* Arancia morbida */
+    --accent-milo: #A8E6CF;  /* Mela verde */
+    
+    /* Ombre morbide e arrotondate */
+    --shadow-sm: 0 6px 16px rgba(122, 92, 67, 0.08);
+    --shadow-md: 0 12px 24px rgba(122, 92, 67, 0.12);
+}

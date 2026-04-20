@@ -1,0 +1,20 @@
+/* * Palette: Erin
+ * Reference: Onde color Pastello Purple/Pink (image_4afee0.png) 
+ */
+:root {
+    --bg-color: #F4ECF7; /* Lilla chiarissimo */
+    --dot-color: #E8DAEF; /* Pois lavanda */
+    --card-bg: #FFFFFF;
+    --border-color: #AF7AC5; /* Viola pastello medio */
+    --text-main: #4A235A; /* Viola scurissimo */
+    --text-muted: #76448A; /* Viola melanzana */
+    
+    /* Gradiente dalle onde: dal viola scuro al rosa chiaro */
+    --accent-gradient: linear-gradient(135deg, #8E44AD, #F5B7B1);
+    --accent-color: #AF7AC5;
+    
+    --text-shadow-color: #FFFFFF;
+    
+    --shadow-sm: 0 6px 16px rgba(74, 35, 90, 0.08);
+    --shadow-md: 0 12px 24px rgba(74, 35, 90, 0.12);
+}

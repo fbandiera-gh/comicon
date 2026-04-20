@@ -1,20 +1,313 @@
-/* File: assets/palettes/base.css */
+/* * Palette Base: Animal Crossing Vibe 
+ * (Usata per la mappa principale)
+ */
 :root {
-    /* Palette Animal Crossing Vibe */
-    --bg-color: #F0F6EE; /* Menta/Salvia chiarissimo */
-    --dot-color: #DDEBD9; /* Verde leggermente più scuro per i pois */
-    --card-bg: #FFFAF0; /* Panna/Crema caldissimo */
-    --border-color: #E8DCC4; /* Beige/Legno chiaro */
-    --text-main: #7A5C43; /* Marrone "Legno" per i testi */
-    --text-muted: #A68A73; /* Marrone sbiadito */
+    --bg-color: #F0F6EE; 
+    --dot-color: #DDEBD9; 
+    --card-bg: #FFFAF0; 
+    --border-color: #E8DCC4; 
+    --text-main: #7A5C43; 
+    --text-muted: #A68A73; 
     
-    /* Colori "Frutta" per i fallback avatar */
-    --accent-dante: #FFAAA5; /* Pesca */
-    --accent-erin: #C8B6E2;  /* Uva/Lavanda */
-    --accent-frisk: #FFD3B6; /* Arancia morbida */
-    --accent-milo: #A8E6CF;  /* Mela verde */
+    --accent-dante: #FFAAA5; 
+    --accent-erin: #C8B6E2;  
+    --accent-frisk: #FFD3B6; 
+    --accent-milo: #A8E6CF;  
     
-    /* Ombre morbide e arrotondate */
     --shadow-sm: 0 6px 16px rgba(122, 92, 67, 0.08);
     --shadow-md: 0 12px 24px rgba(122, 92, 67, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: 'Nunito', sans-serif;
+    color: var(--text-main);
+    background-color: var(--bg-color);
+    /* Pattern a pois in puro CSS */
+    background-image: 
+        radial-gradient(var(--dot-color) 15%, transparent 15%),
+        radial-gradient(var(--dot-color) 15%, transparent 15%);
+    background-position: 0 0, 20px 20px;
+    background-size: 40px 40px;
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem 1.5rem;
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Stile Header & Logo */
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* La Foglia (SVG Animato) */
+.logo-icon {
+    width: 90px;
+    height: 90px;
+    animation: bounce-float 4s ease-in-out infinite;
+    filter: drop-shadow(0 8px 12px rgba(122, 92, 67, 0.15));
+}
+
+@keyframes bounce-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+/* Testo Logo Giocoso */
+.logo-text {
+    font-size: 3rem;
+    color: var(--text-main);
+    margin: 0;
+    font-weight: 900; 
+    letter-spacing: -1px;
+    text-shadow: 2px 2px 0px #FFF, 4px 4px 0px var(--border-color);
+}
+
+.tagline {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #FFF;
+    background: #84C594;
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    border: 3px solid #FFF;
+    box-shadow: 0 4px 0 rgba(132, 197, 148, 0.4);
+    transform: rotate(-2deg);
+}
+
+/* Box di Dialogo NPC (Hero) */
+.hero {
+    position: relative;
+    background: var(--card-bg);
+    border: 4px solid var(--border-color);
+    border-radius: 30px;
+    padding: 2.2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 4rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50px;
+    border-width: 20px 20px 0 0;
+    border-style: solid;
+    border-color: var(--card-bg) transparent transparent transparent;
+    z-index: 2;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    bottom: -26px;
+    left: 47px;
+    border-width: 24px 24px 0 0;
+    border-style: solid;
+    border-color: var(--border-color) transparent transparent transparent;
+    z-index: 1;
+}
+
+.hero .intro {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    flex: 1;
+}
+
+.hero-nameplate {
+    position: absolute;
+    top: -20px;
+    left: 30px;
+    background: #FFD275;
+    color: #7A5C43;
+    font-weight: 900;
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+    border: 3px solid #FFF;
+    box-shadow: 0 4px 8px rgba(122, 92, 67, 0.1);
+    font-size: 1.1rem;
+}
+
+.hero h2 {
+    margin: 0;
+    font-size: 1.7rem;
+    color: var(--text-main);
+    font-weight: 800;
+    margin-top: 0.5rem;
+}
+
+.hero p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-weight: 600;
+}
+
+/* Griglia */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.8rem;
+    margin-bottom: 4rem;
+}
+
+/* Design Card */
+.friend-card {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    background: var(--card-bg);
+    padding: 1.2rem;
+    border-radius: 24px;
+    border: 3px solid var(--border-color);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+}
+
+.friend-card:hover, .friend-card:focus {
+    transform: translateY(-8px) scale(1.02);
+    border-color: #84C594;
+    box-shadow: var(--shadow-md);
+    outline: none;
+}
+
+.avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 22px;
+    flex: 0 0 70px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 900;
+    color: #FFFFFF;
+    border: 3px solid #FFF;
+    box-shadow: 0 4px 8px rgba(122, 92, 67, 0.1);
+    overflow: hidden;
+    background-color: var(--bg-color);
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 19px;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    overflow: hidden;
+    flex: 1;
+}
+
+.card-title {
+    font-size: 1.4rem;
+    color: var(--text-main);
+    font-weight: 800;
+}
+
+.card-sub {
+    font-size: 1rem;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+/* Footer */
+.footer {
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    padding: 2rem;
+    background: var(--card-bg);
+    border: 3px solid var(--border-color);
+    border-radius: 24px;
+    margin-top: auto;
+    position: relative;
+    box-shadow: var(--shadow-sm);
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    background: #FF6B6B;
+    border-radius: 50%;
+    border: 2px solid #FFF;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.kicker {
+    display: inline-block;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--text-main);
+    margin-bottom: 0.8rem;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-weight: 600;
+}
+
+.footer code {
+    background: var(--bg-color);
+    padding: 0.2rem 0.6rem;
+    border-radius: 8px;
+    color: var(--text-main);
+    font-weight: 800;
+    font-family: inherit;
+}
+
+@media (max-width: 600px) {
+    .hero { padding: 1.8rem; margin-bottom: 3.5rem; }
+    .hero::after { left: 30px; }
+    .hero::before { left: 27px; }
+    .friend-card { padding: 1rem; }
 }

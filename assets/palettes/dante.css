@@ -1,0 +1,20 @@
+/* * Palette: Dante
+ * Reference: Rose Rosse & Foglie Scure (image_4af875.png) 
+ */
+:root {
+    --bg-color: #F9EBEA; /* Rosso/Rosa chiarissimo per lo sfondo */
+    --dot-color: #FADBD8; /* Pois delicati */
+    --card-bg: #FFFFFF; /* Panna/Bianco */
+    --border-color: #C0392B; /* Rosso cremisi profondo */
+    --text-main: #641E16; /* Marrone/Rosso scuro per i testi */
+    --text-muted: #922B21; /* Rosso mattone */
+    
+    /* Il gradiente richiesto basato sulle rose */
+    --accent-gradient: linear-gradient(135deg, #C0392B, #E74C3C);
+    --accent-color: #E74C3C; /* Colore di fallback */
+    
+    --text-shadow-color: #FFFFFF; /* Ombra chiara per i testi 3D */
+    
+    --shadow-sm: 0 6px 16px rgba(100, 30, 22, 0.08);
+    --shadow-md: 0 12px 24px rgba(100, 30, 22, 0.15);
+}

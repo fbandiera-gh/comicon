@@ -1,0 +1,23 @@
+/* * Palette: Milo
+ * Reference: Cielo Stellato Midnight Indigo (image_4afff4.png) 
+ * (DARK MODE AC COZY VIBE)
+ */
+:root {
+    --bg-color: #0B0F19; /* Blu notte quasi nero */
+    --dot-color: #1A233A; /* Pois blu scuro per il cielo */
+    --card-bg: #151B2B; /* Blu notte per le card */
+    --border-color: #3949AB; /* Indaco acceso */
+    
+    --text-main: #E8EAF6; /* Bianco ghiaccio per leggere bene al buio */
+    --text-muted: #7986CB; /* Indaco chiaro */
+    
+    /* Gradiente notturno profondo */
+    --accent-gradient: linear-gradient(135deg, #1A237E, #536DFE);
+    --accent-color: #5C6BC0;
+    
+    /* In dark mode l'ombra bianca non va bene, usiamo un blu nerastro */
+    --text-shadow-color: #050814; 
+    
+    --shadow-sm: 0 6px 16px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.6);
+}

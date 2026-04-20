@@ -1,0 +1,20 @@
+/* * Palette: Frisk
+ * Reference: Caramelle Cyan & Acqua (image_4afbbf.png) 
+ */
+:root {
+    --bg-color: #E0F7FA; /* Azzurro ghiaccio */
+    --dot-color: #B2EBF2; /* Pois azzurri */
+    --card-bg: #FFFFFF;
+    --border-color: #00BCD4; /* Cyan vibrante */
+    --text-main: #004D40; /* Verde acqua scurissimo (leggibilità) */
+    --text-muted: #00838F; /* Ottanio */
+    
+    /* Il gradiente cyan richiesto */
+    --accent-gradient: linear-gradient(135deg, #00ACC1, #18FFFF);
+    --accent-color: #00BCD4;
+    
+    --text-shadow-color: #FFFFFF;
+    
+    --shadow-sm: 0 6px 16px rgba(0, 77, 64, 0.08);
+    --shadow-md: 0 12px 24px rgba(0, 77, 64, 0.12);
+}

@@ -1,0 +1,24 @@
+/* * Palette: Chase
+ * Style: High-Contrast Gothic Red (Balanced)
+ */
+:root {
+    /* Fondali: Antracite scurissimo con riflessi rossi */
+    --bg-color: #140b0b; 
+    --card-bg: #1c0e0e; 
+    
+    /* Rossi Gotici */
+    --border-color: #8c0f0f; 
+    --accent-color: #cc0000;
+    --accent-gradient: linear-gradient(135deg, #660000, #cc0000);
+    /* Colore per il pattern delle rose (uso con mask) */
+    --rose-color: rgba(204, 0, 0, 0.14);
+    
+    /* Testi e Leggibilità */
+    --text-main: #fdfdfd; /* Bianco Argento */
+    --text-muted: #b89595; /* Rosa Cenere */
+    --text-shadow-color: rgba(0, 0, 0, 0.8);
+    
+    /* Effetti */
+    --shadow-sm: 0 6px 16px rgba(0, 0, 0, 0.6);
+    --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.8), 0 0 15px rgba(204, 0, 0, 0.2); 
+}

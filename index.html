@@ -3,314 +3,51 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Comicon Contacts</title>
+    <title>Concards | Contatti</title>
     
-    <!-- Favicon (l'icona che appare nella tab del browser) -->
     <link rel="icon" type="image/svg+xml" href="assets/images/leaf.svg">
 
-    <!-- Font molto arrotondato per un effetto "giocoso" -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Link alla palette esterna -->
     <link rel="stylesheet" href="assets/palettes/base.css">
 
     <style>
-        * {
-            box-sizing: border-box;
+        @view-transition {
+            navigation: auto;
         }
 
-        html, body {
-            height: 100%;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Nunito', sans-serif;
-            color: var(--text-main);
-            background-color: var(--bg-color);
-            /* Pattern a pois in puro CSS */
-            background-image: 
-                radial-gradient(var(--dot-color) 15%, transparent 15%),
-                radial-gradient(var(--dot-color) 15%, transparent 15%);
-            background-position: 0 0, 20px 20px;
-            background-size: 40px 40px;
-            background-attachment: fixed;
-            -webkit-font-smoothing: antialiased;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 2rem 1.5rem;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 900px; /* Ripristinato a 900px per l'allineamento originale */
-            margin: 0 auto;
-        }
-
-        /* Stile Header & Logo */
-        .header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2.5rem;
-            text-align: center;
-        }
-
-        .logo-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* La Foglia (SVG Animato) */
-        .logo-icon {
-            width: 90px;
-            height: 90px;
-            animation: bounce-float 4s ease-in-out infinite;
-            filter: drop-shadow(0 8px 12px rgba(122, 92, 67, 0.15));
-        }
-
-        @keyframes bounce-float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(5deg); }
-        }
-
-        /* Testo Logo Giocoso */
-        .logo-text {
-            font-size: 3rem;
-            color: var(--text-main);
-            margin: 0;
-            font-weight: 900; /* Extra bold per effetto "chubby" */
-            letter-spacing: -1px;
-            text-shadow: 2px 2px 0px #FFF, 4px 4px 0px var(--border-color); /* Effetto testo 3D cartoon */
-        }
-
-        .tagline {
-            font-size: 1rem;
-            font-weight: 800;
-            color: #FFF;
-            background: #84C594; /* Verde pastello intenso */
-            padding: 0.5rem 1.2rem;
-            border-radius: 30px;
-            border: 3px solid #FFF;
-            box-shadow: 0 4px 0 rgba(132, 197, 148, 0.4);
-            transform: rotate(-2deg);
-        }
-
-        /* Box di Dialogo NPC (Hero) */
-        .hero {
-            position: relative;
+        /* Stili per il Music Player */
+        .music-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
             background: var(--card-bg);
-            border: 4px solid var(--border-color);
-            border-radius: 30px;
-            padding: 2.2rem;
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            margin-bottom: 4rem; /* Spazio extra per la codina del fumetto */
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* La "codina" del fumetto di dialogo */
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: -20px;
-            left: 50px;
-            border-width: 20px 20px 0 0;
-            border-style: solid;
-            border-color: var(--card-bg) transparent transparent transparent;
-            z-index: 2;
-        }
-
-        /* Bordo della codina del fumetto */
-        .hero::before {
-            content: '';
-            position: absolute;
-            bottom: -26px;
-            left: 47px;
-            border-width: 24px 24px 0 0;
-            border-style: solid;
-            border-color: var(--border-color) transparent transparent transparent;
-            z-index: 1;
-        }
-
-        .hero .intro {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            flex: 1;
-        }
-
-        /* Il "Nome" sopra il box di dialogo */
-        .hero-nameplate {
-            position: absolute;
-            top: -20px;
-            left: 30px;
-            background: #FFD275; /* Giallo sole */
-            color: #7A5C43;
-            font-weight: 900;
-            padding: 0.4rem 1.2rem;
-            border-radius: 20px;
-            border: 3px solid #FFF;
-            box-shadow: 0 4px 8px rgba(122, 92, 67, 0.1);
-            font-size: 1.1rem;
-        }
-
-        .hero h2 {
-            margin: 0;
-            font-size: 1.7rem;
-            color: var(--text-main);
-            font-weight: 800;
-            margin-top: 0.5rem;
-        }
-
-        .hero p {
-            margin: 0;
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-            font-weight: 600;
-        }
-
-        /* Griglia */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.8rem;
-            margin-bottom: 4rem;
-        }
-
-        /* Design Card "Bouncy" */
-        .friend-card {
-            display: flex;
-            gap: 1.2rem;
-            align-items: center;
-            text-decoration: none;
-            color: inherit;
-            background: var(--card-bg);
-            padding: 1.2rem;
-            border-radius: 24px;
             border: 3px solid var(--border-color);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Effetto molla/bounce */
-            box-shadow: var(--shadow-sm);
-            position: relative;
-        }
-
-        .friend-card:hover, .friend-card:focus {
-            transform: translateY(-8px) scale(1.02);
-            border-color: #84C594; /* Si illumina di verde */
-            box-shadow: var(--shadow-md);
-            outline: none;
-        }
-
-        .avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 22px; /* Molto arrotondato */
-            flex: 0 0 70px;
-            display: inline-flex;
+            color: var(--text-muted);
+            display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            font-weight: 900;
-            color: #FFFFFF;
-            border: 3px solid #FFF;
-            box-shadow: 0 4px 8px rgba(122, 92, 67, 0.1);
-            overflow: hidden;
-            background-color: var(--bg-color); /* Fallback base */
-        }
-
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 19px; /* Per incastrarsi perfettamente dentro il bordo bianco */
-        }
-
-        .card-content {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-            overflow: hidden;
-            flex: 1;
-        }
-
-        .card-title {
-            font-size: 1.4rem;
-            color: var(--text-main);
-            font-weight: 800;
-        }
-
-        .card-sub {
-            font-size: 1rem;
-            color: var(--text-muted);
-            font-weight: 700;
-        }
-
-        /* Footer Stile "Bacheca degli avvisi" */
-        .footer {
-            width: 100%;
-            max-width: 600px;
-            text-align: center;
-            padding: 2rem;
-            background: var(--card-bg);
-            border: 3px solid var(--border-color);
-            border-radius: 24px;
-            margin-top: auto;
-            position: relative;
+            cursor: pointer;
             box-shadow: var(--shadow-sm);
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
-        /* Finta puntina da disegno in alto al centro */
-        .footer::before {
-            content: '';
-            position: absolute;
-            top: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 16px;
-            height: 16px;
-            background: #FF6B6B; /* Puntina rossa */
-            border-radius: 50%;
-            border: 2px solid #FFF;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .kicker {
-            display: inline-block;
-            font-size: 1.2rem;
-            font-weight: 900;
+        .music-btn:hover {
+            transform: scale(1.1) translateY(-4px);
+            border-color: var(--text-main);
             color: var(--text-main);
-            margin-bottom: 0.8rem;
         }
-
-        .footer p {
-            margin: 0;
-            font-size: 1rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-            font-weight: 600;
+        .music-btn.playing {
+            color: #84C594;
+            border-color: #84C594;
+            animation: bounce-float-music 2s infinite ease-in-out;
         }
-
-        .footer code {
-            background: var(--bg-color);
-            padding: 0.2rem 0.6rem;
-            border-radius: 8px;
-            color: var(--text-main);
-            font-weight: 800;
-            font-family: inherit;
-        }
-
-        @media (max-width: 600px) {
-            .hero { padding: 1.8rem; margin-bottom: 3.5rem; }
-            .hero::after { left: 30px; }
-            .hero::before { left: 27px; }
-            .friend-card { padding: 1rem; }
+        @keyframes bounce-float-music {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
         }
     </style>
 </head>
@@ -318,28 +55,25 @@
     <div class="container">
         <header class="header" role="banner">
             <div class="logo-container">
-                <!-- SVG Foglia caricato come immagine esterna -->
                 <img class="logo-icon" src="assets/images/leaf.svg" alt="Logo Foglia Cozy">
-                <h1 class="logo-text">Card collection</h1>
+                <h1 class="logo-text"> Concards </h1>
             </div>
-            <div class="tagline">La nostra directory contatti & social</div>
+            <div class="tagline">Una directory di contatti e social</div>
         </header>
 
-        <!-- Box stile "Dialogo NPC" -->
-        <section class="hero" aria-labelledby="hero-title">
-            <div class="hero-nameplate">Hey tu :3</div>
+        <section class="hero">
+            <div class="hero-nameplate">Messaggio</div>
             <div class="intro">
-                <h2 id="hero-title">Hai scattato una foto con noi?</h2>
+                <h2>Hai scattato una foto con noi?</h2>
                 <p>
-                    Invia la foto fatta assieme a chi ti ha lasciato il bigliettino!
-                    <br> Trova qui sotto i nostri profili social e taggaci nelle tue storie o nei post. 
-                    <br> Fai tap su una card per tutti i link! Grazie ancora ❤
+                    Ci fa sempre piacere ricevere i vostri scatti! Trova qui sotto i nostri profili social e taggaci nelle tue storie o nei post. <br> Fai tap su una card per tutti i link!
                 </p>
             </div>
         </section>
 
-        <main class="grid" id="friendsGrid" role="main" aria-live="polite">
-            <a class="friend-card" href="assets/dante/index.html">
+        <main class="grid" id="friendsGrid">
+            
+            <a class="friend-card" href="assets/dante/index.html" style="--card-bg: #F9EBEA; --border-color: #FADBD8; --text-main: #641E16; --text-muted: #922B21; --card-accent: var(--accent-dante);">
                 <div class="avatar" style="background-color: var(--accent-dante);">
                     <img src="assets/images/dante.jpeg" alt="Dante" onerror="this.outerHTML='D'">
                 </div>
@@ -349,7 +83,7 @@
                 </div>
             </a>
 
-            <a class="friend-card" href="assets/erin/index.html">
+            <a class="friend-card" href="assets/erin/index.html" style="--card-bg: #F4ECF7; --border-color: #E8DAEF; --text-main: #4A235A; --text-muted: #76448A; --card-accent: var(--accent-erin);">
                 <div class="avatar" style="background-color: var(--accent-erin);">
                     <img src="assets/images/erin.jpeg" alt="Erin" onerror="this.outerHTML='E'">
                 </div>
@@ -359,7 +93,7 @@
                 </div>
             </a>
 
-            <a class="friend-card" href="assets/frisk/index.html">
+            <a class="friend-card" href="assets/frisk/index.html" style="--card-bg: #E0F7FA; --border-color: #B2EBF2; --text-main: #004D40; --text-muted: #00838F; --card-accent: var(--accent-frisk);">
                 <div class="avatar" style="background-color: var(--accent-frisk);">
                     <img src="assets/images/frisk.jpeg" alt="Frisk" onerror="this.outerHTML='F'">
                 </div>
@@ -369,7 +103,7 @@
                 </div>
             </a>
 
-            <a class="friend-card" href="assets/milo/index.html">
+            <a class="friend-card" href="assets/milo/index.html" style="--card-bg: #151B2B; --border-color: #3949AB; --text-main: #E8EAF6; --text-muted: #7986CB; --card-accent: var(--accent-milo);">
                 <div class="avatar" style="background-color: var(--accent-milo);">
                     <img src="assets/images/milo.png" alt="Milo" onerror="this.outerHTML='M'">
                 </div>
@@ -378,6 +112,17 @@
                     <div class="card-sub">@milohakai</div>
                 </div>
             </a>
+
+            <a class="friend-card" href="assets/chase/index.html" style="--card-bg: #0d0f14; --border-color: #4a0000; --text-main: #fff; --text-muted: #7a1212; --card-accent: #660000;">
+                <div class="avatar" style="background-color: #000; box-shadow: 0 0 0 2px #000;">
+                    <img src="assets/images/chase.jpg" alt="Chase" onerror="this.outerHTML='C'">
+                </div>
+                <div class="card-content">
+                    <div class="card-title" style="text-shadow: 1px 1px 0 #000;">Chase</div>
+                    <div class="card-sub">@cha_cosplay</div>
+                </div>
+            </a>
+
         </main>
 
         <footer class="footer">
@@ -390,22 +135,50 @@
         </footer>
     </div>
 
-<script>
-(function(){
-    const grid = document.getElementById('friendsGrid');
-    const cards = Array.from(grid.querySelectorAll('.friend-card'));
+    <audio id="bgMusic" loop>
+        <source src="assets/audio/theme.mp3" type="audio/mpeg">
+    </audio>
 
-    // Accessibilità: permettere il click tramite tastiera (Invio o Spazio) sulle card
-    cards.forEach(card => {
-        card.addEventListener('keydown', e => { 
-            if(e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                card.click(); 
+    <button id="musicToggle" class="music-btn">
+        <svg id="musicIcon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+        </svg>
+    </button>
+
+    <script>
+        const musicBtn = document.getElementById('musicToggle');
+        const bgMusic = document.getElementById('bgMusic');
+        let isPlaying = false;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTime = sessionStorage.getItem('musicTime');
+            const savedState = sessionStorage.getItem('musicPlaying');
+            if (savedTime) bgMusic.currentTime = parseFloat(savedTime);
+            if (savedState === 'true') {
+                bgMusic.play().then(() => {
+                    isPlaying = true;
+                    musicBtn.classList.add('playing');
+                }).catch(() => {});
             }
         });
-        card.setAttribute('tabindex', '0');
-    });
-})();
-</script>
+
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.classList.remove('playing');
+            } else {
+                bgMusic.play();
+                musicBtn.classList.add('playing');
+            }
+            isPlaying = !isPlaying;
+            sessionStorage.setItem('musicPlaying', isPlaying);
+        });
+
+        window.addEventListener('beforeunload', () => {
+            sessionStorage.setItem('musicTime', bgMusic.currentTime);
+        });
+    </script>
 </body>
 </html>

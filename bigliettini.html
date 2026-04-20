@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Bigliettini Personali Comicon | Generatore</title>
+    
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Librerie per la generazione del PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        /* =========================================
+           SISTEMA DI TEMI: I COLORI DEI PERSONAGGI
+           ========================================= */
+        
+        .theme-main {
+            --bg-color: #F0F6EE; --dot-color: #DDEBD9; --card-bg: #FFFAF0; 
+            --border-color: #E8DCC4; --text-main: #7A5C43; --text-muted: #A68A73; --accent-color: #FFD275;
+        }
+        .theme-milo {
+            --bg-color: #0B0F19; --dot-color: #1A233A; --card-bg: #151B2B; 
+            --border-color: #3949AB; --text-main: #E8EAF6; --text-muted: #7986CB; --accent-color: #5C6BC0; --avatar-border: #FFF;
+        }
+        .theme-frisk {
+            --bg-color: #E0F7FA; --dot-color: #B2EBF2; --card-bg: #FFFFFF; 
+            --border-color: #00BCD4; --text-main: #004D40; --text-muted: #00838F; --accent-color: #00BCD4; --avatar-border: #FFF;
+        }
+        .theme-chase {
+            --bg-color: #0d0f14; --dot-color: #4a0000; --card-bg: #151B2B; 
+            --border-color: #4a0000; --text-main: #ffffff; --text-muted: #8c8c8c; --accent-color: #660000; --avatar-border: #FFF; 
+        }
+        .theme-dante {
+            --bg-color: #F9EBEA; --dot-color: #FADBD8; --card-bg: #FFFFFF;
+            --border-color: #C0392B; --text-main: #641E16; --text-muted: #922B21; --accent-color: #E74C3C; --avatar-border: #FFF;
+        }
+        .theme-erin {
+            --bg-color: #F4ECF7; --dot-color: #E8DAEF; --card-bg: #FFFFFF;
+            --border-color: #AF7AC5; --text-main: #4A235A; --text-muted: #76448A; --accent-color: #AF7AC5; --avatar-border: #FFF;
+        }
+
+        /* =========================================
+           STILI GLOBALI E DELLA CARTA
+           ========================================= */
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Nunito', sans-serif;
+            background: #e0e0e0;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Allerta per Local Server */
+        #local-server-warning {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            background: #ffebee;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 12px;
+            border: 3px solid #ef5350;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        #toast {
+            position: fixed; top: 20px; right: 20px; background: #333; color: #fff;
+            padding: 15px 25px; border-radius: 8px; font-weight: bold; z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: none;
+        }
+
+        /* La base della Carta (85x55 mm) */
+        .card {
+            width: 85mm;
+            height: 55mm;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(var(--dot-color) 15%, transparent 15%),
+                radial-gradient(var(--dot-color) 15%, transparent 15%);
+            background-position: 0 0, 10px 10px;
+            background-size: 20px 20px;
+            position: relative;
+            overflow: hidden;
+            outline: 1.5px dashed #aaa;
+            outline-offset: -1.5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            page-break-inside: avoid;
+        }
+
+        /* --- FRONT SIDE --- */
+        .front {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5mm;
+        }
+
+        .front .avatar {
+            width: 18mm;
+            height: 18mm;
+            border-radius: 6mm;
+            border: 2px solid var(--avatar-border, #FFF);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            background-color: var(--accent-color); 
+            overflow: hidden;
+            transform: rotate(-3deg);
+            margin-bottom: 2mm;
+        }
+
+        .front .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* NUOVO STILE NOMI: "Pill Badge" ad alto contrasto per massima leggibilità */
+        .front .name {
+            font-size: 12pt;
+            font-weight: 900;
+            /* Inversione colori per contrasto: testo prende il colore dello sfondo, sfondo prende il colore del testo */
+            color: var(--card-bg);
+            background-color: var(--text-main);
+            padding: 1mm 4mm;
+            border-radius: 10mm;
+            margin: 0 0 1.5mm 0;
+            line-height: 1.1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .front .username {
+            font-size: 7.5pt;
+            color: var(--text-main);
+            font-weight: 900;
+            margin: 0 0 2.5mm 0;
+            background: var(--card-bg);
+            padding: 0.5mm 2.5mm;
+            border-radius: 4mm;
+            border: 1.5px solid var(--border-color);
+            text-align: center;
+        }
+
+        .front .npc-quote {
+            position: relative;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            padding: 2.5mm 3mm;
+            border-radius: 4mm;
+            font-weight: 800;
+            color: var(--text-main);
+            font-size: 7.5pt;
+            text-align: center;
+            width: 95%;
+            line-height: 1.3;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .front .npc-quote::before {
+            content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+            border-width: 0 6px 6px 6px; border-style: solid; border-color: transparent transparent var(--border-color) transparent;
+        }
+
+        .front .npc-quote::after {
+            content: ''; position: absolute; top: -4px; left: 50%; transform: translateX(-50%);
+            border-width: 0 4px 4px 4px; border-style: solid; border-color: transparent transparent var(--card-bg) transparent;
+        }
+
+        /* --- BACK SIDE --- */
+        .back {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 5mm;
+            gap: 4mm;
+        }
+
+        .qr-container {
+            width: 32mm;
+            height: 32mm;
+            background: #FFF;
+            border: 2.5px solid var(--border-color);
+            border-radius: 4mm;
+            padding: 2mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(122, 92, 67, 0.1);
+        }
+
+        .qr-container img {
+            width: 100%; height: 100%; mix-blend-mode: multiply;
+        }
+
+        .back-text {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .back-text .tagline {
+            font-size: 11pt; color: var(--text-main); font-weight: 900;
+            margin-bottom: 2mm; line-height: 1.1; 
+            -webkit-text-stroke: 1px var(--card-bg);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
+        
+        .back-text .sub-tagline {
+            font-size: 7.5pt; color: var(--text-muted); font-weight: 800; line-height: 1.3;
+        }
+
+        /* --- INTERATTIVITA' ESPORTAZIONE PDF --- */
+        .interactive-front {
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-front:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+        .download-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(92, 107, 192, 0.95);
+            color: #fff; text-align: center; padding: 6px;
+            font-size: 8pt; font-weight: 800;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            pointer-events: none;
+        }
+        .interactive-front:hover .download-overlay {
+            transform: translateY(0);
+        }
+
+        /* Container nascosto utilizzato per il Render PDF */
+        #render-container {
+            position: absolute;
+            top: -9999px; left: -9999px;
+            display: flex;
+            gap: 10mm;
+            padding: 5mm;
+            background: #ffffff;
+            width: 190mm; /* 85+10+85+10 */
+            height: 65mm;
+        }
+        
+        #render-container .card {
+            outline: 0.5px solid #ccc;
+        }
+
+        /* --- STAMPA CARTACEA --- */
+        @media print {
+            body { background: none; padding: 0; gap: 0; }
+            #local-server-warning, #toast, #render-container { display: none !important; }
+            .card { box-shadow: none; float: left; margin: 1mm; }
+            .download-overlay { display: none !important; }
+            @page { margin: 1cm; size: A4; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Avviso Intelligente per chi apre il file offline -->
+    <div id="local-server-warning">
+        ⚠️ ATTENZIONE: Stai aprendo questo file direttamente dal tuo computer (protocollo <code>file:///</code>).<br>
+        Per motivi di sicurezza, il browser bloccherà la generazione dei PDF perché non può leggere le immagini locali (come la foto di Milo).<br>
+        👉 <b>Per farlo funzionare:</b> Apri la cartella usando <b>Live Server</b> su VS Code, oppure carica questo file online!
+    </div>
+
+    <div id="toast">Generazione PDF in corso...</div>
+
+    <!-- Container fuori schermo per creare i PDF dinamicamente -->
+    <div id="render-container"></div>
+
+    <!-- ============================================== -->
+    <!-- FRONT SIDE (PERSONAGGI)                        -->
+    <!-- ============================================== -->
+
+    <!-- MILO -->
+    <div class="card front theme-milo interactive-front" id="front-milo" onclick="exportPDF('front-milo', 'Milo')">
+        <div class="avatar">
+            <img src="assets/images/milo.png" alt="Milo" onerror="this.src='https://api.dicebear.com/7.x/notionists/svg?seed=Milo'">
+        </div>
+        <div class="name">Milo</div>
+        <div class="username">@milohakai</div>
+        <div class="npc-quote">
+            Grazie mille per la foto!<br>Taggami su Instagram! 💙
+        </div>
+        <div class="download-overlay">⬇️ Clicca per scaricare il PDF</div>
+    </div>
+
+    <!-- FRISK -->
+    <div class="card front theme-frisk interactive-front" id="front-frisk" onclick="exportPDF('front-frisk', 'Frisk')">
+        <div class="avatar">
+            <img src="assets/images/frisk.jpeg" alt="Frisk" onerror="this.src='https://api.dicebear.com/7.x/notionists/svg?seed=Frisk'">
+        </div>
+        <div class="name">Frisk</div>
+        <div class="username">@itz_frisk_</div>
+        <div class="npc-quote">
+            Grazie mille per la foto!<br>Taggami su Instagram! 🩵
+        </div>
+        <div class="download-overlay">⬇️ Clicca per scaricare il PDF</div>
+    </div>
+
+    <!-- DANTE -->
+    <div class="card front theme-dante interactive-front" id="front-dante" onclick="exportPDF('front-dante', 'Dante')">
+        <div class="avatar">
+            <img src="assets/images/dante.jpeg" alt="Dante" onerror="this.src='https://api.dicebear.com/7.x/notionists/svg?seed=Dante'">
+        </div>
+        <div class="name">Dante</div>
+        <div class="username">@moonshije.cos_</div>
+        <div class="npc-quote">
+            Grazie mille per la foto!<br>Taggami su Instagram! ❤️
+        </div>
+        <div class="download-overlay">⬇️ Clicca per scaricare il PDF</div>
+    </div>
+
+    <!-- ERIN -->
+    <div class="card front theme-erin interactive-front" id="front-erin" onclick="exportPDF('front-erin', 'Erin')">
+        <div class="avatar">
+            <img src="assets/images/erin.jpeg" alt="Erin" onerror="this.src='https://api.dicebear.com/7.x/notionists/svg?seed=Erin'">
+        </div>
+        <div class="name">Erin</div>
+        <div class="username">@erincosplay._</div>
+        <div class="npc-quote">
+            Grazie mille per la foto!<br>Taggami su Instagram! 💜
+        </div>
+        <div class="download-overlay">⬇️ Clicca per scaricare il PDF</div>
+    </div>
+
+    <!-- CHASE -->
+    <div class="card front theme-chase interactive-front" id="front-chase" onclick="exportPDF('front-chase', 'Chase')">
+        <div class="avatar">
+            <img src="assets/images/chase.jpeg" alt="Chase" onerror="this.src='https://api.dicebear.com/7.x/notionists/svg?seed=Chase'">
+        </div>
+        <div class="name">Chase</div>
+        <div class="username">@cha_cosplay</div>
+        <div class="npc-quote">
+            Grazie mille per la foto!<br>Taggami su Instagram! 🖤
+        </div>
+        <div class="download-overlay">⬇️ Clicca per scaricare il PDF</div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- BACK SIDE (RETRO COMUNE)                       -->
+    <!-- Il primo ha l'ID template per il generatore PDF-->
+    <!-- ============================================== -->
+
+    <!-- Retro Template (usato dal JavaScript e visualizzato a schermo) -->
+    <div class="card back theme-main" id="back-template">
+        <div class="qr-container">
+            <!-- URL Encode applicato per massima compatibilità -->
+            <img src="https://quickchart.io/qr?text=https%3A%2F%2Fconcards.outoftune.dev%2F&dark=7a5c43&light=fffaf0&margin=0&size=300" crossorigin="anonymous" alt="QR Code ConCards">
+        </div>
+        <div class="back-text">
+            <div class="tagline">Hai scattato una<br>foto con noi?</div>
+            <div class="sub-tagline">Scannerizza il QR code<br>per trovare i nostri link<br>e taggaci nei post!</div>
+        </div>
+    </div>
+
+    <!-- Copie aggiuntive per la visualizzazione a schermo e stampa di massa A4 -->
+    <div class="card back theme-main">
+        <div class="qr-container"><img src="https://quickchart.io/qr?text=https%3A%2F%2Fconcards.outoftune.dev%2F&dark=7a5c43&light=fffaf0&margin=0&size=300" crossorigin="anonymous" alt="QR Code"></div>
+        <div class="back-text"><div class="tagline">Hai scattato una<br>foto con noi?</div><div class="sub-tagline">Scannerizza il QR code<br>per trovare i nostri link<br>e taggaci nei post!</div></div>
+    </div>
+    <div class="card back theme-main">
+        <div class="qr-container"><img src="https://quickchart.io/qr?text=https%3A%2F%2Fconcards.outoftune.dev%2F&dark=7a5c43&light=fffaf0&margin=0&size=300" crossorigin="anonymous" alt="QR Code"></div>
+        <div class="back-text"><div class="tagline">Hai scattato una<br>foto con noi?</div><div class="sub-tagline">Scannerizza il QR code<br>per trovare i nostri link<br>e taggaci nei post!</div></div>
+    </div>
+    <div class="card back theme-main">
+        <div class="qr-container"><img src="https://quickchart.io/qr?text=https%3A%2F%2Fconcards.outoftune.dev%2F&dark=7a5c43&light=fffaf0&margin=0&size=300" crossorigin="anonymous" alt="QR Code"></div>
+        <div class="back-text"><div class="tagline">Hai scattato una<br>foto con noi?</div><div class="sub-tagline">Scannerizza il QR code<br>per trovare i nostri link<br>e taggaci nei post!</div></div>
+    </div>
+    <div class="card back theme-main">
+        <div class="qr-container"><img src="https://quickchart.io/qr?text=https%3A%2F%2Fconcards.outoftune.dev%2F&dark=7a5c43&light=fffaf0&margin=0&size=300" crossorigin="anonymous" alt="QR Code"></div>
+        <div class="back-text"><div class="tagline">Hai scattato una<br>foto con noi?</div><div class="sub-tagline">Scannerizza il QR code<br>per trovare i nostri link<br>e taggaci nei post!</div></div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- LOGICA JAVASCRIPT PER IL RENDER DEL PDF        -->
+    <!-- ============================================== -->
+    <script>
+        // Mostra avviso se aperto senza server (file:///)
+        if (window.location.protocol === 'file:') {
+            document.getElementById('local-server-warning').style.display = 'block';
+        }
+
+        window.jsPDF = window.jspdf.jsPDF;
+
+        async function exportPDF(frontId, characterName) {
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            toast.innerText = `Generazione PDF per ${characterName} in corso... ⏳`;
+
+            try {
+                const renderContainer = document.getElementById('render-container');
+                renderContainer.innerHTML = ''; 
+
+                const frontClone = document.getElementById(frontId).cloneNode(true);
+                const backClone = document.getElementById('back-template').cloneNode(true);
+
+                frontClone.classList.remove('interactive-front');
+                const overlay = frontClone.querySelector('.download-overlay');
+                if(overlay) overlay.style.display = 'none';
+
+                renderContainer.appendChild(frontClone);
+                renderContainer.appendChild(backClone);
+
+                await new Promise(r => setTimeout(r, 100));
+
+                const canvas = await html2canvas(renderContainer, {
+                    scale: 3,           
+                    useCORS: true,      
+                    backgroundColor: '#ffffff'
+                });
+
+                const imgData = canvas.toDataURL('image/png');
+                
+                const pdf = new jsPDF({
+                    orientation: 'landscape',
+                    unit: 'mm',
+                    format: [190, 65]
+                });
+
+                pdf.addImage(imgData, 'PNG', 0, 0, 190, 65);
+                pdf.save(`Biglietto_${characterName}_Comicon.pdf`);
+                
+                toast.innerText = `✅ PDF di ${characterName} scaricato!`;
+                setTimeout(() => { toast.style.display = 'none'; }, 3000);
+
+            } catch (error) {
+                console.error("Errore durante la generazione:", error);
+                
+                if (window.location.protocol === 'file:') {
+                    toast.innerHTML = `❌ <b>Errore!</b> Non posso generare il PDF se apri il file dal computer (file:///).<br>Usa l'estensione <b>Live Server</b> su VS Code.`;
+                } else {
+                    toast.innerText = `❌ Errore sconosciuto nella generazione. Riprova.`;
+                }
+                
+                setTimeout(() => { toast.style.display = 'none'; }, 6000);
+            }
+        }
+    </script>
+</body>
+</html>

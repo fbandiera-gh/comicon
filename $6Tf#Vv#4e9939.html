@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metodi Fisici per Sistemi Complessi - Presentazione</title>
+    
+    <!-- Google Fonts: Elegant Serifs and Professional Sans-serifs -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons for visual storytelling -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Tailwind CSS for high-fidelity layout utilities -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax CDN for gorgeous LaTeX math rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- PptxGenJS CDN for Client-Side Native PowerPoint Generation -->
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Fixed 16:9 ratio presentation viewport */
+        .presentation-viewport {
+            width: 1280px;
+            height: 720px;
+            transform-origin: center center;
+            transition: transform 0.2s ease-out;
+        }
+
+        /* Slide base styling */
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            position: relative;
+            background-color: #faf8f5; /* Premium warm cream canvas default */
+            color: #1e293b;
+            padding: 60px 80px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            animation: slideFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideFadeIn {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dark background slides variant */
+        .slide.dark-bg {
+            background-color: #0a1128; /* Deep scientific blue */
+            color: #faf8f5;
+        }
+
+        /* Slide Titles */
+        .slide-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: #0a1128;
+            border-left: 6px solid #0d9488;
+            padding-left: 20px;
+            margin-bottom: 25px;
+            line-height: 1.2;
+        }
+
+        .slide.dark-bg .slide-title {
+            color: #faf8f5;
+            border-left-color: #e2c275; /* Elegant Gold */
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Custom Scrollbar for code blocks */
+        .custom-scroll::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        /* Interactive controls styling */
+        .nav-btn {
+            transition: all 0.2s ease;
+        }
+        .nav-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Grid patterns for slides depth */
+        .grid-decor {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(13, 148, 136, 0.04) 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .slide.dark-bg .grid-decor {
+            background-image: radial-gradient(rgba(226, 194, 117, 0.03) 1.5px, transparent 1.5px);
+        }
+
+        /* Modern text cards */
+        .content-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            transition: transform 0.3s ease;
+        }
+        .slide.dark-bg .content-card {
+            background-color: #0f172a;
+            border-color: #1e293b;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .content-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-between min-h-screen p-4">
+
+    <!-- Top Info Bar -->
+    <div class="w-full max-w-7xl flex justify-between items-center px-6 py-2 text-slate-400 text-xs tracking-wider uppercase z-20">
+        <span>Fisica dei Sistemi Complessi — Università degli Studi</span>
+        <span id="slide-theme-indicator" class="text-[#e2c275]">Modulo: Analisi Topologica</span>
+    </div>
+
+    <!-- MAIN SLIDE DECK CONTAINER -->
+    <div id="presentation-container" class="presentation-viewport flex items-center justify-center relative">
+        
+        <!-- ==================== SLIDE 1 ==================== -->
+        <div class="slide dark-bg active" id="slide-1">
+            <div class="grid-decor"></div>
+            <div class="w-full h-full flex flex-col justify-between relative z-10">
+                <div class="text-left mt-10">
+                    <span class="text-[#e2c275] text-sm uppercase font-semibold tracking-widest bg-amber-500/10 px-3 py-1.5 rounded-full border border-amber-500/20">Metodi Fisici & Analisi Computazionale</span>
+                    <h1 class="text-6xl font-bold mt-6 leading-tight max-w-5xl text-white">Metodi Fisici per<br><span class="text-[#e2c275]">Sistemi Complessi</span></h1>
+                    <p class="text-xl text-slate-400 font-light mt-4 max-w-3xl">Small World Effect, Omofilia, Assortativity e Scale-Free Networks</p>
+                    <p class="text-sm text-amber-500/80 mt-2 font-mono"><i class="fa-solid fa-square-poll-vertical mr-2"></i>Caso di studio: Simulazione di rete sociale con Algoritmo Barabási-Albert</p>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-6 border-t border-slate-800 pt-8 pb-4">
+                    <div>
+                        <span class="text-slate-500 text-xs uppercase block tracking-wider">Studente</span>
+                        <strong class="text-slate-200 text-base">Nome Studente</strong>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 text-xs uppercase block tracking-wider">Corso di Laurea</span>
+                        <strong class="text-slate-200 text-base">Fisica dei Sistemi Complessi</strong>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 text-xs uppercase block tracking-wider">Sessione Accademica</span>
+                        <strong class="text-slate-200 text-base">Anno Accademico 2024 / 2026</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 2 ==================== -->
+        <div class="slide" id="slide-2">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Introduzione ai Social Network</h2>
+            <div class="grid grid-cols-12 gap-8 items-center h-full pb-10">
+                <div class="col-span-7 space-y-4">
+                    <p class="text-lg text-slate-700 leading-relaxed">Le interazioni sociali umane possono essere descritte e interpretate in modo rigoroso applicando formalismi fisici e strumenti topologici ereditati dalla teoria dei grafi.</p>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3">
+                            <div class="bg-teal-500/10 p-2 rounded-lg text-teal-600 mt-1"><i class="fa-solid fa-circle-nodes"></i></div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Rappresentazione a Grafo</h4>
+                                <p class="text-sm text-slate-600">I Nodi (Vertici) definiscono gli attori della rete; gli Archi (Link) formalizzano la presenza di legami stabili o interazioni dinamiche.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="bg-teal-500/10 p-2 rounded-lg text-teal-600 mt-1"><i class="fa-solid fa-network-wired"></i></div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Componente Gigante (LCC)</h4>
+                                <p class="text-sm text-slate-600">Emerge spontaneamente quando la densità di link supera una soglia critica, connettendo quasi l'intera popolazione in un macro-cluster.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-5 h-full flex items-center justify-center">
+                    <div class="bg-white p-4 rounded-xl shadow-lg border border-slate-100 w-full">
+                        <img src="https://cdn.prod.website-files.com/65d609edcc331dd0e4eb519b/683e53576029e44c78368470_AD_4nXfxIXT3frqYTWxta-cGGwr-MeeOYAneTUrKViqRVYOJIQQphBEdNMlk9jMbqlKZhMpwBXdsGz3Kz3_wvSycetBe5A18hQgFluk9QsI-RQLqqwk2zORORZWWT38T16YSzfR_6LGUgA.png" 
+                             class="rounded-lg object-contain h-64 mx-auto" 
+                             alt="Rete Sociale" 
+                             onerror="this.src='https://placehold.co/400x300/f1f5f9/0f172a?text=Topologia+Rete+Sociale'">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 3 ==================== -->
+        <div class="slide" id="slide-3">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Small World Effect</h2>
+            <div class="grid grid-cols-2 gap-8 items-center h-full pb-10">
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-bold text-teal-700">La definizione strutturale</h3>
+                    <p class="text-base text-slate-700 leading-relaxed">
+                        Si parla di effetto <strong>Small World</strong> quando la distanza geodetica media (il percorso più breve possibile) tra due nodi qualsiasi all'interno di una rete complessa cresce in modo estremamente lento, tipicamente proporzionale al logaritmo del numero totale di nodi ($N$):
+                    </p>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center text-lg font-mono text-slate-800">
+                        $\langle d \rangle \sim \ln(N)$
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="content-card">
+                        <h4 class="font-bold text-slate-800 mb-2"><i class="fa-solid fa-calculator mr-2 text-teal-600"></i>Average Path Length</h4>
+                        <p class="text-sm text-slate-600">La metrica fondamentale che calcola il numero medio di passaggi per connettere qualsiasi coppia di nodi all'interno della rete.</p>
+                    </div>
+                    <div class="content-card">
+                        <h4 class="font-bold text-slate-800 mb-2"><i class="fa-solid fa-users-viewfinder mr-2 text-teal-600"></i>Distanza Sociale Percipita</h4>
+                        <p class="text-sm text-slate-600">Anche all'interno di sistemi sterminati come la popolazione planetaria, gli individui rimangono isolati da un numero esiguo di intermediari.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 4 ==================== -->
+        <div class="slide" id="slide-4">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Sei Gradi di Separazione</h2>
+            <div class="grid grid-cols-12 gap-8 items-center h-full pb-10">
+                <div class="col-span-7 space-y-4">
+                    <p class="text-base text-slate-700 leading-relaxed">
+                        Nata come suggestione letteraria negli anni '20, l'idea che la popolazione globale sia strutturata in un macro-sistema denso ha gettato le fondamenta della sociologia matematica moderna.
+                    </p>
+                    <blockquote class="border-l-4 border-teal-500 pl-4 py-2 italic text-slate-600 text-lg">
+                        "Ognuno su questo pianeta è separato da chiunque altro da una catena di massimo altre sei persone."
+                    </blockquote>
+                    <p class="text-sm text-slate-500">
+                        Questo fenomeno ha implicazioni critiche e misurabili nella propagazione di infezioni epidemiche, nella condivisione istantanea delle notizie e nella resilienza sistemica dei canali logistici.
+                    </p>
+                </div>
+                <div class="col-span-5 flex items-center justify-center">
+                    <div class="bg-white p-4 rounded-xl shadow-md border border-slate-100">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Six_degrees_of_separation.svg" 
+                             class="h-60 object-contain mx-auto" 
+                             alt="6 Gradi" 
+                             onerror="this.src='https://placehold.co/400x300/f1f5f9/0f172a?text=6+Gradi+di+Separazione'">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 5 ==================== -->
+        <div class="slide" id="slide-5">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Esperimento di Milgram (1967)</h2>
+            <div class="grid grid-cols-3 gap-6 h-full pb-12">
+                <div class="bg-white p-6 rounded-xl border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="text-teal-600 text-2xl mb-2"><i class="fa-solid fa-bullseye"></i></div>
+                        <h4 class="font-bold text-slate-800 text-lg mb-2">Obiettivo</h4>
+                        <p class="text-sm text-slate-600">Tracciare per la prima volta su base rigorosamente empirica e qualitativa la reale distanza interpersonale media all'interno degli Stati Uniti.</p>
+                    </div>
+                    <span class="text-xs text-slate-400 font-mono">Campagna Sperimentale</span>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="text-teal-600 text-2xl mb-2"><i class="fa-solid fa-envelope-open-text"></i></div>
+                        <h4 class="font-bold text-slate-800 text-lg mb-2">Metodologia</h4>
+                        <p class="text-sm text-slate-600">Spedizione fisica di pacchetti postali destinati a un target specifico in Boston, inoltrabili esclusivamente tramite catene dirette di conoscenze personali.</p>
+                    </div>
+                    <span class="text-xs text-slate-400 font-mono">Regola del Passaparola</span>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="text-teal-600 text-2xl mb-2"><i class="fa-solid fa-users"></i></div>
+                        <h4 class="font-bold text-slate-800 text-lg mb-2">Campione Statistico</h4>
+                        <p class="text-sm text-slate-600">Coinvolgimento iniziale di 297 soggetti residenti in Nebraska e Kansas, aree volutamente scelte per l'isolamento demografico dal target costiero.</p>
+                    </div>
+                    <span class="text-xs text-slate-400 font-mono">N = 297 Partecipanti</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 6 ==================== -->
+        <div class="slide" id="slide-6">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Risultati: Milgram (1967)</h2>
+            <div class="grid grid-cols-2 gap-8 items-center h-full pb-10">
+                <div class="space-y-6">
+                    <div class="flex items-center gap-6 bg-teal-500/5 p-6 rounded-xl border border-teal-500/10">
+                        <div class="text-6xl font-bold font-serif text-teal-600">6.2</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">Passaggi Medi</h4>
+                            <p class="text-xs text-slate-500 uppercase tracking-widest">Distanza Geodetica Effettiva</p>
+                            <p class="text-sm text-slate-600 mt-1">La catena di relazioni umane necessarie per raggiungere lo sconosciuto a Boston.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6 bg-amber-500/5 p-6 rounded-xl border border-amber-500/10">
+                        <div class="text-6xl font-bold font-serif text-amber-600">21.5%</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">Rapporto di Successo</h4>
+                            <p class="text-xs text-slate-500 uppercase tracking-widest">Catene Concluse</p>
+                            <p class="text-sm text-slate-600 mt-1">La quota residua di catene postali arrivate con successo alla destinazione ultima.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-bold text-slate-800">Interpretazione dei Dati</h3>
+                    <p class="text-base text-slate-700 leading-relaxed">
+                        L'esperimento confermò empiricamente l'incredibile connettività del tessuto sociale. Pur affrontando un immenso territorio continentale, la propagazione delle missive seguì un percorso sorprendentemente corto, consacrando la regola qualitativa dei 6 gradi.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 7 ==================== -->
+        <div class="slide" id="slide-7">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Criticità dell'Esperimento</h2>
+            <div class="grid grid-cols-2 gap-8 items-center h-full pb-10">
+                <div class="space-y-4">
+                    <div class="bg-red-500/5 border border-red-500/10 p-5 rounded-xl flex gap-4">
+                        <div class="text-red-600 text-xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">Elevatissimo Tasso di Attrito</h4>
+                            <p class="text-sm text-slate-600 mt-1">La dispersione di circa l'80% delle catene postali ha sollevato forti dubbi sull'accuratezza della misura finale.</p>
+                        </div>
+                    </div>
+                    <div class="bg-amber-500/5 border border-amber-500/10 p-5 rounded-xl flex gap-4">
+                        <div class="text-amber-600 text-xl"><i class="fa-solid fa-arrows-split-up-and-left"></i></div>
+                        <div>
+                            <h4 class="font-bold text-slate-800">Sbilanciamento di Campione</h4>
+                            <p class="text-sm text-slate-600 mt-1">Gli intermediari che hanno attivamente concluso la staffetta erano mediamente soggetti di status sociale elevato e più "connessi".</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-bold text-slate-800">La Conclusione Moderna</h3>
+                    <p class="text-base text-slate-700 leading-relaxed">
+                        Nonostante i limiti procedurali, la ricerca di Milgram pose interrogativi rivoluzionari. I sistemi complessi sociali mostrano effettivamente la proprietà di Small World, tuttavia la costante numerica "$6$" va interpretata come una stima di scala, non un valore matematico universale.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 8 ==================== -->
+        <div class="slide dark-bg" id="slide-8">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">L'Esperimento MSN (2008)</h2>
+            <div class="grid grid-cols-12 gap-8 items-center h-full pb-10">
+                <div class="col-span-7 space-y-4">
+                    <span class="text-xs text-[#e2c275] font-mono uppercase tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">Leskovec & Horvitz — Planetary-Scale View</span>
+                    <p class="text-base text-slate-300 leading-relaxed">
+                        La prima reale validazione empirica dello Small World su scala planetaria, resa possibile grazie all'analisi sistematica del database globale dei contatti di <strong>Microsoft MSN Messenger</strong>.
+                    </p>
+                    <div class="grid grid-cols-3 gap-4 text-center mt-4">
+                        <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+                            <span class="block text-[#e2c275] text-xl font-bold font-serif">30 Miliardi</span>
+                            <span class="text-slate-400 text-xs">Conversazioni</span>
+                        </div>
+                        <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+                            <span class="block text-[#e2c275] text-xl font-bold font-serif">240 Milioni</span>
+                            <span class="text-slate-400 text-xs">Utenti Attivi</span>
+                        </div>
+                        <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+                            <span class="block text-[#e2c275] text-xl font-bold font-serif">1.3 Miliardi</span>
+                            <span class="text-slate-400 text-xs">Archi Connessi</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-span-5">
+                    <!-- Retro XP MSN Window Mockup -->
+                    <div class="bg-[#1c305a] border-2 border-[#3c6ca8] rounded-lg shadow-2xl overflow-hidden font-sans">
+                        <div class="bg-gradient-to-r from-[#0c50a0] to-[#2c8cd0] px-3 py-1.5 flex justify-between items-center text-xs text-white font-bold">
+                            <span><i class="fa-solid fa-message mr-1.5 text-amber-300"></i> MSN Messenger</span>
+                            <div class="flex gap-1">
+                                <span class="w-3 h-3 bg-amber-400 rounded-sm inline-block"></span>
+                                <span class="w-3 h-3 bg-red-500 rounded-sm inline-block"></span>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-[#e8f0f8] text-slate-800 space-y-2 h-44 overflow-y-auto text-xs custom-scroll">
+                            <div class="p-2 bg-white rounded border border-slate-300">
+                                <strong class="text-teal-600">Server_Bot:</strong> Caricamento log globale delle interazioni concluso.
+                            </div>
+                            <div class="p-2 bg-white rounded border border-slate-300">
+                                <strong class="text-amber-600">Leskovec:</strong> Analisi dei cammini minimi in corso sulla componente gigante connessa...
+                            </div>
+                            <div class="p-2 bg-teal-500/10 rounded border border-teal-500/20 text-center font-bold">
+                                Risultato Calcolo: Distanza Media = 6.6
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 9 ==================== -->
+        <div class="slide" id="slide-9">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Conferma Empirica su MSN</h2>
+            <div class="grid grid-cols-2 gap-8 items-center h-full pb-10">
+                <div class="space-y-6">
+                    <div class="bg-slate-50 border border-slate-200 p-6 rounded-2xl relative">
+                        <div class="absolute -top-4 left-6 bg-teal-600 text-white text-xs font-mono uppercase tracking-widest px-3 py-1 rounded">Cammino Medio Misurato</div>
+                        <div class="text-7xl font-serif font-bold text-teal-600 mt-2">6.6</div>
+                        <p class="text-sm text-slate-600 mt-2">Un valore di una vicinanza statistica sbalorditiva rispetto ai 6.2 originariamente ricavati da Milgram su un campione fisico.</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-bold text-slate-800">Robustezza Sistemica</h3>
+                    <p class="text-base text-slate-700 leading-relaxed">
+                        L'indagine ha svelato una rete sociale coesa e resistente: oltre il <strong>99.9%</strong> di tutta l'utenza planetaria attiva appartiene strutturalmente alla medesima macro-componente gigante connessa, escludendo l'esistenza di sacche isolate rilevanti.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 10 ==================== -->
+        <div class="slide dark-bg" id="slide-10">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Introduzione all'Omofilia</h2>
+            <div class="grid grid-cols-2 gap-8 items-center h-full pb-10">
+                <div class="space-y-4">
+                    <blockquote class="border-l-4 border-[#e2c275] pl-6 py-4 italic text-slate-200 text-xl leading-relaxed">
+                        "L'individuo mostra una tendenza naturale ad instaurare relazioni preferenziali con suoi simili."
+                    </blockquote>
+                    <p class="text-base text-slate-400">
+                        Questo principio è un cardine della sociologia classica e trova solide basi matematiche nei processi dinamici di selezione su grafi.
+                    </p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="bg-slate-900/50 p-5 rounded-xl border border-slate-800">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-xl text-[#e2c275]"><i class="fa-solid fa-building-columns"></i></span>
+                            <h4 class="font-bold text-white font-serif text-lg">Platone — "Liside"</h4>
+                        </div>
+                        <p class="text-sm text-slate-400">"La somiglianza genera la vera amicizia." Primo riscontro filosofico sistematico del concetto.</p>
+                    </div>
+                    <div class="bg-slate-900/50 p-5 rounded-xl border border-slate-800">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-xl text-[#e2c275]"><i class="fa-solid fa-scroll"></i></span>
+                            <h4 class="font-bold text-white font-serif text-lg">Aristotele — "Etica Nicomachea"</h4>
+                        </div>
+                        <p class="text-sm text-slate-400">"Si amano coloro che condividono le stesse virtù e passioni."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 11 ==================== -->
+        <div class="slide" id="slide-11">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Omofilia nei Social Network</h2>
+            <div class="grid grid-cols-12 gap-8 items-center h-full pb-10">
+                <div class="col-span-7 space-y-4">
+                    <p class="text-base text-slate-700 leading-relaxed">
+                        Nei network digitali contemporanei, l'omofilia si traduce nella creazione sistematica di cluster d'utenza iper-connessi internamente ma isolati dall'esterno.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex gap-3">
+                            <span class="text-teal-600 font-bold mt-0.5"><i class="fa-solid fa-check"></i></span>
+                            <p class="text-sm text-slate-600"><strong>Aggregazione Scolastica:</strong> Relazioni nate esclusivamente dalla condivisione di aule, corsi o interessi sportivi comuni.</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="text-teal-600 font-bold mt-0.5"><i class="fa-solid fa-check"></i></span>
+                            <p class="text-sm text-slate-600"><strong>Community Detection:</strong> Algoritmi computazionali moderni identificano cluster coesi basandosi solo sulle affinità latenti strutturate.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-5">
+                    <div class="bg-white p-4 rounded-xl shadow-md border border-slate-100">
+                        <img src="https://www.tandfonline.com/cms/asset/9c8f5579-19e1-4036-bc75-2ce72a125c5e/frfs_a_2107632_f0001_oc.jpg" 
+                             class="h-60 object-contain mx-auto rounded" 
+                             alt="Omofilia Network" 
+                             onerror="this.src='https://placehold.co/400x300/f1f5f9/0f172a?text=Cluster+Omofilia'">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 12 ==================== -->
+        <div class="slide" id="slide-12">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Conseguenze dell'Omofilia</h2>
+            <div class="grid grid-cols-3 gap-6 h-full pb-12">
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200/60 flex flex-col justify-between">
+                    <div>
+                        <div class="text-red-500 text-2xl mb-3"><i class="fa-solid fa-arrows-left-right-to-line"></i></div>
+                        <h4 class="font-bold text-slate-800 text-lg mb-2">Polarizzazione</h4>
+                        <p class="text-sm text-slate-600">Le opinioni collettive tendono gradualmente ad allontanarsi verso estremismi opposti, azzerando le istanze di mediazione.</p>
+                    </div>
+                    <span class="text-xs font-semibold text-slate-400">Dinamica di Separazione</span>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200/60 flex flex-col justify-between">
+                    <div>
+                        <div class="text-red-500 text-2xl mb-3"><i class="fa-solid fa-volume-high"></i></div>
+                        <h4 class="font-bold text-slate-800 text-lg mb-2">Echo Chambers</h4>
+                        <p class="text-sm text-slate-600">Creazione di bolle chiuse dove l'utente ascolta esclusivamente la continua ripetizione e conferma delle proprie tesi.</p>
+                    </div>
+                    <span class="text-xs font-semibold text-slate-400">Auto-Rinforzo</span>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200/60 flex flex-col justify-between">
+                    <div>
+                        <div class="text-red-500 text-2xl mb-3"><i class="fa-solid fa-border-none"></i></div>
+                        <h4 class="font-bold text-slate-800 text-lg mb-2">Segregazione</h4>
+                        <p class="text-sm text-slate-600">Frammentazione informativa che limita di fatto l'accesso a fonti d'opinione esterne o radicalmente divergenti.</p>
+                    </div>
+                    <span class="text-xs font-semibold text-slate-400">Chiusura Informativa</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 13 ==================== -->
+        <div class="slide" id="slide-13">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Esempio Pratico di Calcolo</h2>
+            <div class="grid grid-cols-12 gap-8 items-center h-full pb-10">
+                <div class="col-span-5 space-y-4">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden text-xs">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-800 text-white font-mono">
+                                    <th class="p-3">Parametro</th>
+                                    <th class="p-3">Valore</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr>
+                                    <td class="p-3 font-semibold text-slate-700">Nodi Totali (N)</td>
+                                    <td class="p-3">7 (4 Maschi, 3 Femmine)</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-slate-700">Maschi (p)</td>
+                                    <td class="p-3">4/7 $\approx$ 0.57</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-slate-700">Femmine (q)</td>
+                                    <td class="p-3">3/7 $\approx$ 0.43</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-slate-700">Archi Totali (E)</td>
+                                    <td class="p-3">9</td>
+                                </tr>
+                                <tr class="bg-teal-50/50">
+                                    <td class="p-3 font-semibold text-teal-800">Archi Misti (Cross)</td>
+                                    <td class="p-3 font-bold text-teal-700">2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="col-span-7 space-y-4">
+                    <h3 class="text-2xl font-bold text-slate-800">Probabilità del Modello Nullo</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        In una rete priva di preferenze di genere, la probabilità casuale di avere un arco misto (cross-gender) è data da:
+                    </p>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-center text-lg text-slate-800">
+                        $2pq = 2 \left(\frac{4}{7}\right) \left(\frac{3}{7}\right) \approx 0.49$
+                    </div>
+                    <p class="text-sm text-slate-600">
+                        Su 9 archi totali, gli archi misti attesi teorici sarebbero: $0.49 \times 9 \approx 4.4$ (circa 4 archi).
+                    </p>
+                    <div class="bg-teal-500/10 border border-teal-500/20 p-4 rounded-xl text-xs text-teal-800 font-medium">
+                        <i class="fa-solid fa-calculator mr-2"></i><strong>Verifica:</strong> Osservati (2) &lt; Attesi (4). Essendo gli archi reali sensiilmente inferiori al modello casuale, è provata l'azione di forze omofile.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 14 ==================== -->
+        <div class="slide" id="slide-14">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Network Assortativity</h2>
+            <div class="grid grid-cols-2 gap-8 items-center h-full pb-10">
+                <div class="space-y-4">
+                    <p class="text-base text-slate-700 leading-relaxed">
+                        L'<strong>assortatività</strong> indica l'inclinazione intrinseca dei nodi di un grafo a collegarsi in via preferenziale con nodi simili in base ad attributi pre-definiti (noto anche come *Assortative Mixing*).
+                    </p>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-800 mb-2">Mixing per grado</h4>
+                        <p class="text-sm text-slate-600">Nelle reti sociali reali, gli individui con alto grado (estremamente popolari o influenti) tendono fortemente a creare legami diretti con altri hub.</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="content-card">
+                        <div class="text-teal-600 text-lg mb-2"><i class="fa-solid fa-music"></i></div>
+                        <strong class="block text-slate-800 text-sm mb-1">Hobby e Interessi</strong>
+                        <span class="text-xs text-slate-500">Gusti musicali, sportivi e affinità culturali.</span>
+                    </div>
+                    <div class="content-card">
+                        <div class="text-teal-600 text-lg mb-2"><i class="fa-solid fa-language"></i></div>
+                        <strong class="block text-slate-800 text-sm mb-1">Barriere Linguistiche</strong>
+                        <span class="text-xs text-slate-500">Separazione geografica e idiomatica.</span>
+                    </div>
+                    <div class="content-card">
+                        <div class="text-teal-600 text-lg mb-2"><i class="fa-solid fa-briefcase"></i></div>
+                        <strong class="block text-slate-800 text-sm mb-1">Attività Quotidiane</strong>
+                        <span class="text-xs text-slate-500">Colleghi scolastici o professionali.</span>
+                    </div>
+                    <div class="content-card">
+                        <div class="text-teal-600 text-lg mb-2"><i class="fa-solid fa-cake-candles"></i></div>
+                        <strong class="block text-slate-800 text-sm mb-1">Dati Demografici</strong>
+                        <span class="text-xs text-slate-500">Età, etnia, classi generazionali.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 15 ==================== -->
+        <div class="slide" id="slide-15">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Influence vs Homophily</h2>
+            <div class="grid grid-cols-2 gap-8 items-center h-full pb-10">
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-bold text-slate-800">Dilemmi di causalità</h3>
+                    <p class="text-base text-slate-700 leading-relaxed">
+                        Separare empiricamente l'omofilia dall'influenza rappresenta uno dei nodi metodologici più complessi nell'analisi delle reti longitudinali (temporali).
+                    </p>
+                    <div class="p-4 bg-amber-500/5 border border-amber-500/10 rounded-xl text-xs text-slate-600">
+                        <i class="fa-solid fa-circle-question text-amber-500 mr-1.5"></i><strong>La domanda chiave:</strong> Sono nati simili e quindi si sono uniti, o si sono uniti e per questo sono diventati simili?
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="content-card border-l-4 border-l-teal-600">
+                        <h4 class="font-bold text-teal-800 text-sm">Homophily (Selezione)</h4>
+                        <p class="text-xs text-slate-500 italic mt-1">"Birds of a feather flock together"</p>
+                        <p class="text-xs text-slate-600 mt-2">La similarità pre-esiste alla formazione della relazione. La connessione è un effetto.</p>
+                    </div>
+                    <div class="content-card border-l-4 border-l-amber-600">
+                        <h4 class="font-bold text-amber-800 text-sm">Influence (Contagio)</h4>
+                        <p class="text-xs text-slate-500 italic mt-1">"Sei la media delle 5 persone che frequenti di più"</p>
+                        <p class="text-xs text-slate-600 mt-2">La connessione pre-esiste alla similarità. La similarità è un effetto di emulazione o imitazione.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 16 ==================== -->
+        <div class="slide" id="slide-16">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Tabella Comparativa dei Meccanismi</h2>
+            <div class="w-full h-full flex flex-col justify-center pb-12">
+                <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-800 text-white font-mono text-sm">
+                                <th class="p-4">Meccanismo</th>
+                                <th class="p-4">Processo Generativo</th>
+                                <th class="p-4">Principale Effetto sulla Rete</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-sm">
+                            <tr>
+                                <td class="p-4 font-semibold text-teal-700">Omofilia</td>
+                                <td class="p-4">Selezione Sociale Attiva</td>
+                                <td class="p-4">Crea cluster locali fitti basati su attributi identitari preesistenti.</td>
+                            </tr>
+                            <tr class="bg-slate-50/50">
+                                <td class="p-4 font-semibold text-amber-700">Influenza</td>
+                                <td class="p-4">Contagio Sociale e Imitazione</td>
+                                <td class="p-4">Omogeneizza opinioni e comportamenti all'interno di cluster esistenti.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold text-indigo-700">Assortatività</td>
+                                <td class="p-4">Mixing Strutturale per Grado</td>
+                                <td class="p-4">Modifica le connessioni tra hub (es. hub che preferiscono altri hub).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 17 ==================== -->
+        <div class="slide dark-bg" id="slide-17">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Analisi Quantitativa</h2>
+            <div class="grid grid-cols-2 gap-8 items-center h-full pb-10">
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-bold text-[#e2c275]">Metodi di Misura</h3>
+                    <p class="text-base text-slate-300 leading-relaxed">
+                        La misura del network mixing richiede lo sviluppo di tecniche statistiche di confronto basate sui modelli nulli, per escludere gli effetti causati esclusivamente dalla distribuzione dei gradi.
+                    </p>
+                </div>
+                
+                <div class="space-y-3">
+                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800 flex gap-3">
+                        <span class="text-[#e2c275] mt-1 text-base"><i class="fa-solid fa-shield"></i></span>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">Modelli Nulli</h4>
+                            <p class="text-xs text-slate-400 mt-1">Confronto con grafi casuali equivalenti per grado (*Configuration Model*).</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800 flex gap-3">
+                        <span class="text-[#e2c275] mt-1 text-base"><i class="fa-solid fa-clock"></i></span>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">Dati Longitudinali</h4>
+                            <p class="text-xs text-slate-400 mt-1">Osservazioni su più finestre temporali per distinguere l'effetto dell'omofilia dall'influenza.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 18 ==================== -->
+        <div class="slide" id="slide-18">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Definizioni di Base</h2>
+            <div class="grid grid-cols-12 gap-8 items-center h-full pb-10">
+                <div class="col-span-7 space-y-4 text-base">
+                    <div class="space-y-3 text-slate-700">
+                        <p><strong>Grafo $G(V, E)$:</strong> Composto da un insieme di nodi $V$ e archi $E$. Indichiamo con $m = |E|$ il totale degli archi del sistema.</p>
+                        <p><strong>Matrice di Adiacenza $A$:</strong> Matrice quadrata $N \times N$, dove ogni elemento è definito come:</p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-center font-mono">
+                        $A_{ij} = \begin{cases} 1 & \text{se } i \text{ e } j \text{ sono connessi} \\ 0 & \text{altrimenti} \end{cases}$
+                    </div>
+                </div>
+                
+                <div class="col-span-5">
+                    <div class="content-card">
+                        <h4 class="font-bold text-slate-800 mb-2"><i class="fa-solid fa-fingerprint text-teal-600 mr-2"></i>Vettore di Attributi $t$</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            A ogni singolo nodo $v_i$ è associata una caratteristica o classe discreta rappresentata da $t(v_i)$ (es. genere, orientamento ideologico, nazionalità).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 19 ==================== -->
+        <div class="slide" id="slide-19">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Delta di Kronecker nei Grafi</h2>
+            <div class="grid grid-cols-2 gap-8 items-center h-full pb-10">
+                <div class="space-y-4">
+                    <p class="text-base text-slate-700 leading-relaxed">
+                        Per calcolare con accuratezza quanti archi uniscono nodi che condividono la medesima classe di attributo, utilizziamo il filtro della <strong>Delta di Kronecker</strong> ($\delta_{x,y}$):
+                    </p>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-center text-lg text-slate-800">
+                        $\sum_{i,j} A_{ij} \delta_{t(v_i), t(v_j)}$
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="content-card">
+                        <h4 class="font-bold text-slate-800 mb-2">Comportamento Logico</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            L'operatore logico agisce filtrando i contributi degli archi sulla base dell'identità categoriale dei nodi alle estremità:
+                        </p>
+                        <div class="bg-slate-100 p-2 rounded text-xs font-mono mt-2 text-center text-slate-800">
+                            $\delta_{x,y} = \begin{cases} 1 & \text{se } x = y \\ 0 & \text{se } x \neq y \end{cases}$
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 20 ==================== -->
+        <div class="slide" id="slide-20">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Probabilità Casuale</h2>
+            <div class="grid grid-cols-2 gap-8 items-center h-full pb-10">
+                <div class="space-y-4">
+                    <p class="text-base text-slate-700 leading-relaxed">
+                        Nel modello casuale di riferimento (*Configuration Model*), la probabilità attesa che esista una connessione tra un nodo $i$ di grado $k_i$ e un nodo $j$ di grado $k_j$ è proporzionale al prodotto dei loro gradi:
+                    </p>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-center text-lg text-slate-800">
+                        $P_{ij} = \frac{k_i k_j}{2m}$
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="content-card">
+                        <h4 class="font-bold text-slate-800 mb-2">Eliminazione del Bias</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Questa normalizzazione è fondamentale: gli hub (nodi ad altissima connettività) possiedono intrinsecamente un'elevata probabilità di connettersi casualmente con chiunque, indipendentemente dall'affinità.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 21 ==================== -->
+        <div class="slide dark-bg" id="slide-21">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">La Modularità (Q)</h2>
+            <div class="grid grid-cols-12 gap-8 items-center h-full pb-10">
+                <div class="col-span-6 space-y-4">
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        La modularità $Q$ misura lo scostamento tra la frazione di archi interni ai cluster osservati nella rete reale e la frazione attesa nel caso neutro:
+                    </p>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 text-[#e2c275] text-center text-base font-mono">
+                        $Q = \frac{1}{2m} \sum_{i,j} \left( A_{ij} - \frac{k_i k_j}{2m} \right) \delta_{c_i, c_j}$
+                    </div>
+                </div>
+                
+                <div class="col-span-6 space-y-3 text-xs">
+                    <div class="bg-slate-900/40 p-3 rounded-lg border border-slate-800">
+                        <strong class="text-teal-400">Q &gt; 0:</strong> Comunità fitte e omofile significative.
+                    </div>
+                    <div class="bg-slate-900/40 p-3 rounded-lg border border-slate-800">
+                        <strong class="text-slate-400">Q = 0:</strong> Struttura di link assimilabile ad un grafo casuale.
+                    </div>
+                    <div class="bg-slate-900/40 p-3 rounded-lg border border-slate-800">
+                        <strong class="text-amber-400">Q &lt; 0:</strong> Rete disassortativa (nodi simili si evitano sistematicamente).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 22 ==================== -->
+        <div class="slide" id="slide-22">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Forma Matriciale</h2>
+            <div class="grid grid-cols-2 gap-8 items-center h-full pb-10">
+                <div class="space-y-4">
+                    <div class="content-card">
+                        <h4 class="font-bold text-slate-800 text-sm mb-1">Indicator Matrix S</h4>
+                        <p class="text-xs text-slate-600">
+                            Matrice binaria di dimensione $N \times c$ (dove $c$ indica il totale delle classi), definita come:
+                        </p>
+                        <div class="bg-slate-50 p-2 rounded text-xs font-mono mt-1 text-center text-slate-800">
+                            $S_{ig} = \begin{cases} 1 & \text{se } i \text{ appartiene al gruppo } g \\ 0 & \text{altrimenti} \end{cases}$
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="content-card">
+                        <h4 class="font-bold text-slate-800 text-sm mb-1">Matrice di Modularità B</h4>
+                        <p class="text-xs text-slate-600">
+                            Rappresenta la differenza elemento per elemento tra la topologia reale e il modello casuale equivalente:
+                        </p>
+                        <div class="bg-slate-50 p-2 rounded text-xs font-mono mt-1 text-center text-slate-800">
+                            $B_{ij} = A_{ij} - \frac{k_i k_j}{2m}$
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 23 ==================== -->
+        <div class="slide" id="slide-23">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Normalizzazione</h2>
+            <div class="grid grid-cols-2 gap-8 items-center h-full pb-10">
+                <div class="space-y-4">
+                    <p class="text-base text-slate-700 leading-relaxed">
+                        Sfruttando l'algebra delle matrici e l'operatore di traccia ($\text{Tr}$), l'equazione finale della modularità assume una forma estremamente elegante ed efficiente per il calcolo numerico:
+                    </p>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-center text-lg text-slate-800">
+                        $Q = \frac{1}{2m} \text{Tr}(S^T B S)$
+                    </div>
+                </div>
+                
+                <div class="space-y-3">
+                    <div class="flex gap-3 text-sm">
+                        <span class="font-bold text-teal-600 font-mono">$S^T$:</span>
+                        <p class="text-slate-600">Trasposta della matrice degli indicatori categoriali.</p>
+                    </div>
+                    <div class="flex gap-3 text-sm">
+                        <span class="font-bold text-teal-600 font-mono">$B$:</span>
+                        <p class="text-slate-600">Matrice di modularità contenente lo scarto dal modello casuale.</p>
+                    </div>
+                    <div class="flex gap-3 text-sm">
+                        <span class="font-bold text-teal-600 font-mono">$\text{Tr}$:</span>
+                        <p class="text-slate-600">Operatore traccia, somma degli elementi sulla diagonale principale.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 24 ==================== -->
+        <div class="slide" id="slide-24">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Analisi dei Risultati</h2>
+            <div class="w-full h-full flex flex-col justify-center pb-12">
+                <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-800 text-white font-mono text-xs">
+                                <th class="p-4">Tipo di Rete Investigata</th>
+                                <th class="p-4">Valore Q Tipico</th>
+                                <th class="p-4">Significato Strutturale</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-xs">
+                            <tr>
+                                <td class="p-4 font-semibold text-teal-800">Rete Sociale (Amicizie)</td>
+                                <td class="p-4 font-mono font-bold text-teal-700">0.3 - 0.7</td>
+                                <td class="p-4 text-slate-600">Forte omofilia ed aggregazione in comunità dense e stabili.</td>
+                            </tr>
+                            <tr class="bg-slate-50/50">
+                                <td class="p-4 font-semibold text-amber-800">Reti Biologiche (Proteine)</td>
+                                <td class="p-4 font-mono font-bold text-amber-700">-0.1 - 0.1</td>
+                                <td class="p-4 text-slate-600">Struttura quasi casuale o deterministica, senza macro-comunità d'affinità.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-semibold text-indigo-800">Rete Internet (AS Level)</td>
+                                <td class="p-4 font-mono font-bold text-indigo-700">Q &lt; 0</td>
+                                <td class="p-4 text-slate-600">Rete disassortativa: gli hub centrali tendono a connettersi a piccoli nodi foglia.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 25 ==================== -->
+        <div class="slide dark-bg" id="slide-25">
+            <div class="grid-decor"></div>
+            <div class="w-full h-full flex flex-col justify-center items-center text-center relative z-10">
+                <hr class="w-20 border-t-4 border-[#e2c275] mb-6">
+                <span class="text-[#e2c275] text-xs uppercase font-mono tracking-widest bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">Sezione Sperimentale</span>
+                <h2 class="text-5xl font-bold mt-4 mb-2 text-white font-serif">Parte II: Rete Scale-Free</h2>
+                <p class="text-slate-400 text-lg font-light max-w-xl">Modellazione e simulazione computazionale della nascita spontanea degli hub di rete.</p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 26 ==================== -->
+        <div class="slide" id="slide-26">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Algoritmo Barabási-Albert (B-A)</h2>
+            <div class="grid grid-cols-12 gap-8 items-center h-full pb-10">
+                <div class="col-span-7 space-y-4 text-sm">
+                    <h3 class="text-xl font-bold text-teal-700 font-serif">Preferential Attachment</h3>
+                    <p class="text-slate-700 leading-relaxed">
+                        Meccanismo noto come <strong>"Rich Get Richer"</strong>: la probabilità $\Pi$ che un nuovo nodo si connetta ad un nodo preesistente $i$ è direttamente proporzionale al grado $k_i$ (popolarità) di quest'ultimo:
+                    </p>
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-center font-mono text-base text-slate-850">
+                        $\Pi(k_i) = \frac{k_i}{\sum_j k_j}$
+                    </div>
+                    <p class="text-xs text-slate-500">
+                        La crescita dinamica (aggiunta continua di nodi e link) produce spontaneamente l'emergenza di pochissimi nodi con un numero spropositato di archi (gli **Hub**).
+                    </p>
+                </div>
+                <div class="col-span-5">
+                    <div class="bg-white p-4 rounded-xl shadow-md border border-slate-100">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Degree_distribution_for_a_network_with_150000_vertices_and_mean_degree_%3D_6_created_using_the_Barabasi-Albert_model.png" 
+                             class="h-56 object-contain mx-auto rounded" 
+                             alt="Grado BA" 
+                             onerror="this.src='https://placehold.co/400x300/f1f5f9/0f172a?text=Legge+di+Potenza'">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 27 ==================== -->
+        <div class="slide dark-bg" id="slide-27">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Analisi del Codice Python</h2>
+            <div class="grid grid-cols-12 gap-6 h-full pb-14 overflow-hidden">
+                <!-- Left panel with explanation -->
+                <div class="col-span-4 space-y-3 text-xs">
+                    <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-800">
+                        <strong class="text-[#e2c275] block mb-1">Inizializzazione</strong>
+                        <p class="text-slate-400">Generazione di un grafo scale-free con $n$ nodi utilizzando l'algoritmo integrato di NetworkX.</p>
+                    </div>
+                    <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-800">
+                        <strong class="text-[#e2c275] block mb-1">Layout & Visualizzazione</strong>
+                        <p class="text-slate-400">Uso di `spring_layout` per accentrare visivamente gli hub e posizionare all'esterno i nodi a basso grado.</p>
+                    </div>
+                    <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-800">
+                        <strong class="text-[#e2c275] block mb-1">Proprietà Metriche</strong>
+                        <p class="text-slate-400">Calcolo della distanza geodetica media (Average Shortest Path Length) per validare la connettività.</p>
+                    </div>
+                </div>
+                <!-- Right panel with Python IDE Mockup -->
+                <div class="col-span-8 flex flex-col bg-[#0b132b] rounded-lg border border-slate-800 shadow-2xl overflow-hidden h-[420px]">
+                    <div class="bg-[#1c2541] px-4 py-2 flex justify-between items-center text-[10px] font-mono text-slate-400">
+                        <span><i class="fa-brands fa-python text-yellow-500 mr-1.5"></i> social_hub_net.py</span>
+                        <div class="flex gap-1">
+                            <span class="w-2.5 h-2.5 bg-red-500/70 rounded-full"></span>
+                            <span class="w-2.5 h-2.5 bg-yellow-500/70 rounded-full"></span>
+                            <span class="w-2.5 h-2.5 bg-green-500/70 rounded-full"></span>
+                        </div>
+                    </div>
+                    <div class="p-4 font-mono text-[10px] text-slate-300 overflow-y-auto custom-scroll h-full leading-normal">
+                        <pre class="whitespace-pre-wrap"><span class="text-pink-400">import</span> networkx <span class="text-pink-400">as</span> nx
+<span class="text-pink-400">import</span> matplotlib.pyplot <span class="text-pink-400">as</span> plt
+
+<span class="text-purple-400">class</span> <span class="text-teal-400">SocialHubNetwork</span>:
+    <span class="text-purple-400">def</span> <span class="text-blue-400">__init__</span>(<span class="text-amber-400">self</span>, n, m):
+        <span class="text-slate-500"># Genera la rete tramite Preferential Attachment</span>
+        <span class="text-amber-400">self</span>.G = nx.barabasi_albert_graph(n, m)
+
+    <span class="text-purple-400">def</span> <span class="text-blue-400">draw</span>(<span class="text-amber-400">self</span>):
+        plt.figure(figsize=(<span class="text-orange-400">12</span>, <span class="text-orange-400">9</span>))
+        
+        <span class="text-slate-500"># Algoritmo a molla per spingere gli hub al centro</span>
+        pos = nx.spring_layout(<span class="text-amber-400">self</span>.G, seed=<span class="text-orange-400">42</span>)
+        
+        degrees = <span class="text-blue-400">dict</span>(<span class="text-amber-400">self</span>.G.degree())
+        node_sizes = [v * <span class="text-orange-400">100</span> <span class="text-pink-400">for</span> v <span class="text-pink-400">in</span> degrees.values()] 
+        node_colors = [v <span class="text-pink-400">for</span> v <span class="text-pink-400">in</span> degrees.values()]     
+        
+        nodes = nx.draw_networkx_nodes(
+            <span class="text-amber-400">self</span>.G, pos, 
+            node_size=node_sizes, 
+            node_color=node_colors, 
+            cmap=plt.cm.plasma
+        )
+        
+        nx.draw_networkx_edges(<span class="text-amber-400">self</span>.G, pos, alpha=<span class="text-orange-400">0.2</span>, edge_color=<span class="text-green-400">"gray"</span>)
+        path = nx.average_shortest_path_length(<span class="text-amber-400">self</span>.G)
+        
+        plt.title(<span class="text-green-400">f"Rete Scale-Free (B-A)\nCammino Medio: {path:.2f}"</span>)
+        plt.colorbar(nodes, label=<span class="text-green-400">"Grado del nodo"</span>)
+        plt.axis(<span class="text-green-400">"off"</span>)
+        plt.show()</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 28 ==================== -->
+        <div class="slide" id="slide-28">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Risultati della Simulazione</h2>
+            <div class="grid grid-cols-12 gap-8 items-center h-full pb-10">
+                <div class="col-span-7 space-y-4 text-sm">
+                    <p class="text-slate-700 leading-relaxed">
+                        L'esecuzione numerica del codice evidenzia in modo inequivocabile le tre proprietà teoriche delle reti complesse reali:
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex gap-3">
+                            <span class="text-teal-600 font-bold"><i class="fa-solid fa-square-poll-vertical"></i></span>
+                            <p class="text-slate-600"><strong>Scale-Free Distribution:</strong> La distribuzione di grado segue una legge di potenza, non una curva campana classica (Gaussiana).</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="text-teal-600 font-bold"><i class="fa-solid fa-hubspot"></i></span>
+                            <p class="text-slate-600"><strong>Hub Spontanei:</strong> Pochissimi nodi centralizzano la connettività globale senza alcun controllo preordinato dall'esterno.</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="text-teal-600 font-bold"><i class="fa-solid fa-bolt"></i></span>
+                            <p class="text-slate-600"><strong>Diffusione Istantanea:</strong> Gli hub riducono drasticamente l'Average Path Length fungendo da "scorciatoie" per l'intera rete.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-5">
+                    <div class="bg-white p-4 rounded-xl shadow-md border border-slate-100">
+                        <img src="https://media.geeksforgeeks.org/wp-content/uploads/barabasi2final.jpg" 
+                             class="h-56 object-contain mx-auto rounded" 
+                             alt="Rete BA" 
+                             onerror="this.src='https://placehold.co/400x300/f1f5f9/0f172a?text=Hubs+Spontanei'">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 29 ==================== -->
+        <div class="slide dark-bg" id="slide-29">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Schema Concettuale Finale</h2>
+            <div class="w-full h-full flex flex-col justify-center items-center pb-14 relative z-10">
+                <!-- Styled Concept Diagram Flow -->
+                <div class="flex items-center gap-4 w-full max-w-4xl justify-between">
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-center flex-1">
+                        <span class="text-[#e2c275] font-serif font-bold text-lg block mb-1">Small World</span>
+                        <span class="text-xs text-slate-400">Le Fondamenta della Distanza</span>
+                    </div>
+                    <div class="text-slate-600"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-center flex-1">
+                        <span class="text-[#e2c275] font-serif font-bold text-lg block mb-1">Omofilia</span>
+                        <span class="text-xs text-slate-400">Il Comportamento di Clustering</span>
+                    </div>
+                    <div class="text-slate-600"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-center flex-1">
+                        <span class="text-[#e2c275] font-serif font-bold text-lg block mb-1">Assortativity</span>
+                        <span class="text-xs text-slate-400">La Struttura Topologica</span>
+                    </div>
+                </div>
+                
+                <div class="text-slate-600 my-4"><i class="fa-solid fa-arrow-down"></i></div>
+                
+                <div class="flex items-center gap-4 w-full max-w-4xl justify-between">
+                    <div class="bg-slate-900 border border-[#e2c275]/30 p-4 rounded-xl text-center flex-1">
+                        <span class="text-white font-serif font-bold text-lg block mb-1">BA Algorithm</span>
+                        <span class="text-xs text-slate-400">Il Modello Dinamico</span>
+                    </div>
+                    <div class="text-slate-600"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="bg-slate-900 border border-[#e2c275]/30 p-4 rounded-xl text-center flex-1">
+                        <span class="text-white font-serif font-bold text-lg block mb-1">Crescita & Attachment</span>
+                        <span class="text-xs text-slate-400">I Meccanismi Evolutivi</span>
+                    </div>
+                    <div class="text-slate-600"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="bg-slate-900 border border-[#e2c275]/30 p-4 rounded-xl text-center flex-1">
+                        <span class="text-white font-serif font-bold text-lg block mb-1">Emergenza Hubs</span>
+                        <span class="text-xs text-slate-400">Il Risultato Topologico</span>
+                    </div>
+                </div>
+                
+                <p class="text-xs text-slate-400 mt-6 max-w-2xl text-center leading-relaxed">
+                    Il modello teorico dimostra rigorosamente come l'applicazione di semplici regole a livello microscopico-locale dia origine spontaneamente a comportamenti complessi ed organizzati su scala macroscopica globale.
+                </p>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 30 ==================== -->
+        <div class="slide" id="slide-30">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Conclusioni & Bibliografia</h2>
+            <div class="grid grid-cols-2 gap-8 items-center h-full pb-10">
+                <div class="space-y-4 text-xs">
+                    <h3 class="text-lg font-bold text-teal-700 font-serif">Key Takeaways</h3>
+                    <div class="space-y-3">
+                        <p class="text-slate-600"><strong>1. Universalità:</strong> Lo Small World è una proprietà costitutiva e universale della quasi totalità delle reti reali fisiche o sociali.</p>
+                        <p class="text-slate-600"><strong>2. Aggregazione Spontanea:</strong> L'omofilia e l'influenza coordinano la nascita di cluster coesi con ricadute dirette sulla segregazione delle notizie.</p>
+                        <p class="text-slate-600"><strong>3. Resilienza Selettiva:</strong> Le reti Scale-Free mostrano estrema tolleranza ad errori casuali ma letale vulnerabilità ad attacchi mirati contro gli hub.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 text-xs space-y-2">
+                    <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2 text-[10px]">Riferimenti Bibliografici</h4>
+                    <p class="text-slate-600"><strong>S. Milgram (1967):</strong> <em>The Small World Problem</em>, Psychology Today.</p>
+                    <p class="text-slate-600"><strong>J. Leskovec & E. Horvitz (2008):</strong> <em>Planetary-Scale Views on MSN</em>, WWW.</p>
+                    <p class="text-slate-600"><strong>Barabási & Albert (1999):</strong> <em>Emergence of scaling in random networks</em>, Science.</p>
+                    <p class="text-slate-600"><strong>Stanford CS224W:</strong> <em>Machine Learning with Graphs</em>, Lecture Notes.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 31 ==================== -->
+        <div class="slide" id="slide-31">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Fonti delle Immagini — Parte I</h2>
+            <div class="w-full h-full flex flex-col justify-start pb-12 overflow-y-auto custom-scroll max-h-[500px]">
+                <ul class="divide-y divide-slate-100 text-xs">
+                    <li class="py-3 flex justify-between items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-400 font-mono">01.</span>
+                            <div>
+                                <strong class="block text-slate-800">Visualizzazione Social Network</strong>
+                                <span class="text-slate-400">www.puppygraph.com</span>
+                            </div>
+                        </div>
+                        <a href="https://cdn.prod.website-files.com/65d609edcc331dd0e4eb519b/683e53576029e44c78368470_AD_4nXfxIXT3frqYTWxta-cGGwr-MeeOYAneTUrKViqRVYOJIQQphBEdNMlk9jMbqlKZhMpwBXdsGz3Kz3_wvSycetBe5A18hQgFluk9QsI-RQLqqwk2zORORZWWT38T16YSzfR_6LGUgA.png" target="_blank" class="text-teal-600 hover:underline">Sorgente Link <i class="fa-solid fa-up-right-from-square ml-1"></i></a>
+                    </li>
+                    <li class="py-3 flex justify-between items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-400 font-mono">02.</span>
+                            <div>
+                                <strong class="block text-slate-800">Sei Gradi Schema</strong>
+                                <span class="text-slate-400">estimy.com</span>
+                            </div>
+                        </div>
+                        <a href="https://estimy/wp-content/uploads/2024/10/six-degrees-1-diagram.jpg" target="_blank" class="text-teal-600 hover:underline">Sorgente Link <i class="fa-solid fa-up-right-from-square ml-1"></i></a>
+                    </li>
+                    <li class="py-3 flex justify-between items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-400 font-mono">03.</span>
+                            <div>
+                                <strong class="block text-slate-800">Distanza Interpersonale SVG</strong>
+                                <span class="text-slate-400">en.wikipedia.org</span>
+                            </div>
+                        </div>
+                        <a href="https://upload.wikimedia.org/wikipedia/commons/4/4a/Six_degrees_of_separation.svg" target="_blank" class="text-teal-600 hover:underline">Sorgente Link <i class="fa-solid fa-up-right-from-square ml-1"></i></a>
+                    </li>
+                    <li class="py-3 flex justify-between items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-400 font-mono">04.</span>
+                            <div>
+                                <strong class="block text-slate-800">Windows MSN Messenger Mockup Base</strong>
+                                <span class="text-slate-400">stackoverflow.com</span>
+                            </div>
+                        </div>
+                        <a href="https://isstatic.net/xrlóu.png" target="_blank" class="text-teal-600 hover:underline">Sorgente Link <i class="fa-solid fa-up-right-from-square ml-1"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 32 ==================== -->
+        <div class="slide" id="slide-32">
+            <div class="grid-decor"></div>
+            <h2 class="slide-title">Fonti delle Immagini — Parte II</h2>
+            <div class="w-full h-full flex flex-col justify-start pb-12 overflow-y-auto custom-scroll max-h-[500px]">
+                <ul class="divide-y divide-slate-100 text-xs">
+                    <li class="py-3 flex justify-between items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-400 font-mono">05.</span>
+                            <div>
+                                <strong class="block text-slate-800">Cluster Omofili Politici</strong>
+                                <span class="text-slate-400">www.tandfonline.com</span>
+                            </div>
+                        </div>
+                        <a href="https://www.tandfonline.com/cms/asset/9c8f5579-19e1-4036-bc75-2ce72a125c5e/frfs_a_2107632_f0001_oc.jpg" target="_blank" class="text-teal-600 hover:underline">Sorgente Link <i class="fa-solid fa-up-right-from-square ml-1"></i></a>
+                    </li>
+                    <li class="py-3 flex justify-between items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-400 font-mono">06.</span>
+                            <div>
+                                <strong class="block text-slate-800">Legge di Potenza Barabási-Albert</strong>
+                                <span class="text-slate-400">en.wikipedia.org</span>
+                            </div>
+                        </div>
+                        <a href="https://upload.wikimedia.org/wikipedia/commons/3/3b/Degree_distribution_for_a_network_with_150000_vertices_and_mean_degree_%3D_6_created_using_the_Barabasi-Albert_model.png" target="_blank" class="text-teal-600 hover:underline">Sorgente Link <i class="fa-solid fa-up-right-from-square ml-1"></i></a>
+                    </li>
+                    <li class="py-3 flex justify-between items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-400 font-mono">07.</span>
+                            <div>
+                                <strong class="block text-slate-800">Grafo Preferential Attachment Visualizzato</strong>
+                                <span class="text-slate-400">www.geeksforgeeks.org</span>
+                            </div>
+                        </div>
+                        <a href="https://media.geeksforgeeks.org/wp-content/uploads/barabasi2final.jpg" target="_blank" class="text-teal-600 hover:underline">Sorgente Link <i class="fa-solid fa-up-right-from-square ml-1"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==================== INTERACTIVE DECK NAVIGATION CONTROLS ==================== -->
+    <div class="w-full max-w-7xl flex flex-col md:flex-row items-center justify-between px-6 py-4 border-t border-slate-800/80 bg-slate-950/40 rounded-xl backdrop-blur-md gap-4 z-20">
+        <!-- Shortcuts / Quick tips -->
+        <div class="flex gap-4 text-xs text-slate-400 items-center">
+            <span><kbd class="bg-slate-800 text-white px-1.5 py-0.5 rounded text-[10px] shadow border border-slate-700">←</kbd> / <kbd class="bg-slate-800 text-white px-1.5 py-0.5 rounded text-[10px] shadow border border-slate-700">→</kbd> per scorrere</span>
+            <span class="hidden md:inline text-slate-600">|</span>
+            <span class="hidden md:inline"><kbd class="bg-slate-800 text-white px-1.5 py-0.5 rounded text-[10px] shadow border border-slate-700">F</kbd> Schermo Intero</span>
+        </div>
+
+        <!-- Central core navigation keys -->
+        <div class="flex items-center gap-6">
+            <button onclick="prevSlide()" class="nav-btn bg-slate-800 hover:bg-slate-700 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg border border-slate-700">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            
+            <div class="flex items-center gap-2">
+                <!-- Dropdown selector for instantaneous slide jump -->
+                <select id="slide-select" onchange="jumpToSlide(this.value)" class="bg-slate-900 border border-slate-700 text-[#e2c275] text-xs font-semibold rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    <!-- Javascript will dynamically populate all options -->
+                </select>
+                <span class="text-slate-400 text-xs font-semibold" id="slide-indicator">Slide 1 / 32</span>
+            </div>
+
+            <button onclick="nextSlide()" class="nav-btn bg-slate-800 hover:bg-slate-700 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg border border-slate-700">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Extra utility buttons (Autoplay, Fullscreen, PowerPoint Native Export) -->
+        <div class="flex items-center gap-3">
+            <button onclick="exportToPPTX()" class="bg-teal-600 hover:bg-teal-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-lg shadow-teal-900/20 transition-all duration-150 hover:scale-[1.03]">
+                <i class="fa-solid fa-file-powerpoint"></i> Esporta PowerPoint (.pptx)
+            </button>
+            <button id="autoplay-btn" onclick="toggleAutoplay()" class="bg-slate-900 hover:bg-slate-800 text-[#e2c275] border border-slate-800 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5">
+                <i class="fa-solid fa-play"></i> Autoplay
+            </button>
+            <button onclick="toggleFullscreen()" class="bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5">
+                <i class="fa-solid fa-expand"></i> Fullscreen
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== PRESENTATION LOGIC JAVASCRIPT ==================== -->
+    <script>
+        const totalSlides = 32;
+        let currentSlide = 1;
+        let autoplayInterval = null;
+        const autoplayDuration = 5000; // 5 seconds per slide
+
+        // Dynamic resizing for exact 16:9 box scaling inside standard browsers
+        function resizeSlides() {
+            const container = document.getElementById('presentation-container');
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            
+            const targetWidth = 1280;
+            const targetHeight = 720;
+            
+            // Deduct the dynamic header and control bar margins
+            const availableHeight = windowHeight - 160; 
+            const availableWidth = windowWidth - 40;
+            
+            const scaleX = availableWidth / targetWidth;
+            const scaleY = availableHeight / targetHeight;
+            
+            // Pick minimum scale factor to maintain exact slide proportion box bounds
+            const scale = Math.min(scaleX, scaleY, 1.1); 
+            
+            container.style.transform = `scale(${scale})`;
+        }
+
+        // Initialize presentation, layout binds, and dropdown options populate
+        window.addEventListener('load', () => {
+            resizeSlides();
+            window.addEventListener('resize', resizeSlides);
+            
+            // Populate our slide selector dropdown
+            const selector = document.getElementById('slide-select');
+            for(let i = 1; i <= totalSlides; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = `Slide ${i}`;
+                selector.appendChild(opt);
+            }
+            
+            updateNavigationHUD();
+        });
+
+        // Navigation Controllers
+        function updateNavigationHUD() {
+            // Hide all slides
+            for(let i = 1; i <= totalSlides; i++) {
+                const slideEl = document.getElementById(`slide-${i}`);
+                if (slideEl) {
+                    slideEl.classList.remove('active');
+                }
+            }
+            
+            // Render active target slide
+            const activeSlideEl = document.getElementById(`slide-${currentSlide}`);
+            if (activeSlideEl) {
+                activeSlideEl.classList.add('active');
+                
+                // Set Theme indicator color appropriately
+                const indicator = document.getElementById('slide-theme-indicator');
+                if (activeSlideEl.classList.contains('dark-bg')) {
+                    indicator.textContent = "Modulo: Fisica dei Sistemi Complessi (Sezione Focus)";
+                    indicator.className = "text-[#e2c275]";
+                } else {
+                    indicator.textContent = "Analisi Quantitativa & Social Network Dynamics";
+                    indicator.className = "text-teal-600";
+                }
+            }
+            
+            // Sync current indicators
+            document.getElementById('slide-indicator').textContent = `Slide ${currentSlide} / ${totalSlides}`;
+            document.getElementById('slide-select').value = currentSlide;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+            } else {
+                currentSlide = 1; // loop back to start
+            }
+            updateNavigationHUD();
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+            } else {
+                currentSlide = totalSlides; // loop back to end
+            }
+            updateNavigationHUD();
+        }
+
+        function jumpToSlide(num) {
+            currentSlide = parseInt(num);
+            updateNavigationHUD();
+        }
+
+        // Keyboard Handlers mapping
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Spacebar') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'f' || e.key === 'F') {
+                toggleFullscreen();
+            }
+        });
+
+        // Autoplay Loop Controller
+        function toggleAutoplay() {
+            const btn = document.getElementById('autoplay-btn');
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+                autoplayInterval = null;
+                btn.innerHTML = `<i class="fa-solid fa-play"></i> Autoplay`;
+                btn.classList.remove('bg-amber-600', 'text-white');
+                btn.classList.add('bg-slate-900', 'text-[#e2c275]');
+            } else {
+                autoplayInterval = setInterval(nextSlide, autoplayDuration);
+                btn.innerHTML = `<i class="fa-solid fa-pause"></i> Pausa`;
+                btn.classList.remove('bg-slate-900', 'text-[#e2c275]');
+                btn.classList.add('bg-amber-600', 'text-white');
+            }
+        }
+
+        // Native Presentation Fullscreen mode
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.error(`Errore attivando lo schermo intero: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Swipe Gesture Helpers for touchscreens (phones, tablets)
+        let touchstartX = 0;
+        let touchendX = 0;
+        
+        const gestureZone = document.getElementById('presentation-container');
+        gestureZone.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        });
+        
+        gestureZone.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            handleGesture();
+        });
+        
+        function handleGesture() {
+            if (touchendX < touchstartX - 50) {
+                nextSlide(); // Swiped left, go next
+            }
+            if (touchendX > touchstartX + 50) {
+                prevSlide(); // Swiped right, go prev
+            }
+        }
+
+        // PowerPoint Native PPTX Exporter Engine
+        function exportToPPTX() {
+            let pptx = new PptxGenJS();
+            pptx.layout = 'LAYOUT_16x9'; // Native PowerPoint 16:9 layout
+
+            // Define Global Colors
+            const darkBg = '0A1128';
+            const lightBg = 'FAF8F5';
+            const accentGold = 'E2C275';
+            const accentTeal = '0D9488';
+            const darkText = '1E293B';
+            const lightText = 'FAF8F5';
+
+            // Custom Helpers
+            function addHeader(slide, text, isDark = false) {
+                slide.addText(text, {
+                    x: 0.8, y: 0.5, w: 11.5, h: 0.8,
+                    fontSize: 28,
+                    fontFace: 'Georgia',
+                    bold: true,
+                    color: isDark ? lightText : '0A1128',
+                    align: 'left'
+                });
+            }
+
+            // Slide 1: Copertina
+            let s1 = pptx.addSlide();
+            s1.background = { color: darkBg };
+            s1.addText("METODI FISICI PER SISTEMI COMPLESSI", { x: 0.8, y: 1.8, w: 11.2, h: 1.5, fontSize: 38, bold: true, color: 'FFFFFF', fontFace: 'Georgia' });
+            s1.addText("Small World Effect, Omofilia, Assortativity e Scale-Free Networks", { x: 0.8, y: 3.2, w: 11.2, h: 0.6, fontSize: 18, color: accentGold, fontFace: 'Arial' });
+            s1.addText("Caso di studio: Simulazione di una rete sociale mediante algoritmo Barabási-Albert", { x: 0.8, y: 3.9, w: 11.2, h: 0.5, fontSize: 13, color: '94A3B8', italic: true, fontFace: 'Arial' });
+            s1.addText("Studente: Nome Studente\nCorso: Fisica dei Sistemi Complessi\nData di Consegna: 2024", { x: 0.8, y: 5.2, w: 11.2, h: 1.0, fontSize: 11, color: 'CBD5E1', fontFace: 'Arial' });
+
+            // Slide 2: Introduzione
+            let s2 = pptx.addSlide();
+            s2.background = { color: lightBg };
+            addHeader(s2, "Introduzione ai Social Network");
+            s2.addText("Le interazioni sociali umane possono essere descritte e interpretate in modo rigoroso applicando formalismi fisici e strumenti topologici ereditati dalla teoria dei grafi.", { x: 0.8, y: 1.5, w: 6.5, h: 1.5, fontSize: 15, color: darkText });
+            s2.addText("• Rappresentazione a Grafo:\nI Nodi (Vertici) definiscono gli attori della rete; gli Archi (Link) formalizzano la presenza di legami stabili o interazioni dinamiche.\n\n• Componente Gigante (LCC):\nEmerge spontaneamente quando la densità di link supera una soglia critica, connettendo quasi l'intera popolazione in un macro-cluster.", { x: 0.8, y: 3.0, w: 6.5, h: 3.5, fontSize: 13, color: '334155' });
+            s2.addImage({ path: "https://cdn.prod.website-files.com/65d609edcc331dd0e4eb519b/683e53576029e44c78368470_AD_4nXfxIXT3frqYTWxta-cGGwr-MeeOYAneTUrKViqRVYOJIQQphBEdNMlk9jMbqlKZhMpwBXdsGz3Kz3_wvSycetBe5A18hQgFluk9QsI-RQLqqwk2zORORZWWT38T16YSzfR_6LGUgA.png", x: 7.8, y: 1.6, w: 4.2, h: 4.2 });
+
+            // Slide 3: Small World Effect
+            let s3 = pptx.addSlide();
+            s3.background = { color: lightBg };
+            addHeader(s3, "Small World Effect");
+            s3.addText("La definizione strutturale:", { x: 0.8, y: 1.5, w: 5.5, h: 0.4, fontSize: 18, bold: true, color: accentTeal });
+            s3.addText("Si parla di effetto Small World quando la distanza geodetica media (il percorso più breve possibile) tra due nodi qualsiasi all'interno di una rete complessa cresce in modo estremamente lento, proporzionale al logaritmo del numero totale di nodi (N):\n\n       < d > ~ ln(N)", { x: 0.8, y: 2.0, w: 5.5, h: 3.5, fontSize: 14, color: darkText });
+            s3.addText("METRICHE CHIAVE\n\n• Average Path Length:\nLa metrica fondamentale che calcola il numero medio di passaggi per connettere qualsiasi coppia di nodi all'interno della rete.\n\n• Distanza Sociale Percipita:\nAnche all'interno di sistemi sterminati come la popolazione planetaria, gli individui rimangono isolati da un numero esiguo di intermediari.", { x: 6.8, y: 1.8, w: 5.2, h: 4.5, fontSize: 13, color: '334155' });
+
+            // Slide 4: Sei Gradi di Separazione
+            let s4 = pptx.addSlide();
+            s4.background = { color: lightBg };
+            addHeader(s4, "Sei Gradi di Separazione");
+            s4.addText("Nata come suggestione letteraria negli anni '20, l'idea che la popolazione globale sia strutturata in un macro-sistema denso ha gettato le fondamenta della sociologia matematica moderna.\n\n\"Ognuno su questo pianeta è separato da chiunque altro da una catena di massimo altre sei persone.\"\n\nQuesto fenomeno ha implicazioni critiche e misurabili nella propagazione di infezioni epidemiche, nella condivisione istantanea delle notizie e nella resilienza sistemica dei canali logistici.", { x: 0.8, y: 1.5, w: 6.5, h: 4.8, fontSize: 14, color: darkText });
+            s4.addImage({ path: "https://upload.wikimedia.org/wikipedia/commons/4/4a/Six_degrees_of_separation.svg", x: 7.8, y: 1.8, w: 4.2, h: 3.8 });
+
+            // Slide 5: Esperimento di Milgram (1967)
+            let s5 = pptx.addSlide();
+            s5.background = { color: lightBg };
+            addHeader(s5, "Esperimento di Milgram (1967)");
+            s5.addText("1. OBIETTIVO\nTracciare per la prima volta su base rigorosamente empirica e qualitativa la reale distanza interpersonale media all'interno degli Stati Uniti.", { x: 0.8, y: 1.8, w: 3.5, h: 4.0, fontSize: 13, color: '334155' });
+            s5.addText("2. METODOLOGIA\nSpedizione fisica di pacchetti postali destinati a un target specifico in Boston, inoltrabili esclusivamente tramite catene dirette di conoscenze personali.", { x: 4.7, y: 1.8, w: 3.5, h: 4.0, fontSize: 13, color: '334155' });
+            s5.addText("3. CAMPIONE STATISTICO\nCoinvolgimento iniziale di 297 soggetti residenti in Nebraska e Kansas, aree volutamente scelte per l'isolamento demografico dal target costiero.", { x: 8.6, y: 1.8, w: 3.5, h: 4.0, fontSize: 13, color: '334155' });
+
+            // Slide 6: Risultati Milgram
+            let s6 = pptx.addSlide();
+            s6.background = { color: lightBg };
+            addHeader(s6, "Risultati: Milgram (1967)");
+            s6.addText("6.2 Passaggi Medi\nLa catena di relazioni umane necessarie per raggiungere lo sconosciuto a Boston.\n\n21.5% Rapporto di Successo\nLa quota residua di catene postali arrivate con successo alla destinazione ultima.", { x: 0.8, y: 1.8, w: 5.5, h: 4.0, fontSize: 15, color: darkText, bold: true });
+            s6.addText("Interpretazione dei Dati:\n\nL'esperimento confermò empiricamente l'incredibile connettività del tessuto sociale. Pur affrontando un immenso territorio continentale, la propagazione delle missive seguì un percorso sorprendentemente corto, consacrando la regola qualitativa dei 6 gradi di separazione.", { x: 6.8, y: 1.8, w: 5.2, h: 4.0, fontSize: 14, color: '334155' });
+
+            // Slide 7: Criticità Milgram
+            let s7 = pptx.addSlide();
+            s7.background = { color: lightBg };
+            addHeader(s7, "Criticità dell'Esperimento");
+            s7.addText("• Elevatissimo Tasso di Attrito:\nLa dispersione di circa l'80% delle catene postali ha sollevato forti dubbi sull'accuratezza della misura finale, poiché solo 64 catene su 297 sono state effettivamente concluse.\n\n• Sbilanciamento di Campione (Bias Metodologico):\nGli intermediari che hanno attivamente concluso la staffetta erano mediamente soggetti di status sociale elevato e di conseguenza più integrati e connessi rispetto alla media.", { x: 0.8, y: 1.8, w: 6.0, h: 4.5, fontSize: 14, color: '334155' });
+            s7.addText("La Conclusione Moderna:\n\nNonostante i limiti procedurali, la ricerca di Milgram pose interrogativi rivoluzionari. I sistemi complessi sociali mostrano effettivamente la proprietà di Small World, tuttavia la costante numerica '6' va interpretata come una stima di scala fenomenologica, non come un valore matematico universale.", { x: 7.4, y: 1.8, w: 4.6, h: 4.5, fontSize: 13, color: darkText, italic: true });
+
+            // Slide 8: L'Esperimento MSN (2008)
+            let s8 = pptx.addSlide();
+            s8.background = { color: darkBg };
+            addHeader(s8, "L'Esperimento MSN (2008)", true);
+            s8.addText("Primo studio su scala veramente globale utilizzando i dati anonimizzati di Microsoft Messenger nel 2008 da Leskovec & Horvitz.\n\n• 30 miliardi di conversazioni salvate\n• 240 milioni di utenti attivi investigati\n• 1.3 miliardi di archi globali analizzati", { x: 0.8, y: 1.8, w: 7.0, h: 4.0, fontSize: 15, color: 'CBD5E1' });
+            s8.addText("PROGETTO PLANETARY-SCALE\n\nGrazie alla potenza di calcolo degli anni duemila, l'esperimento MSN è riuscito a mappare fedelmente l'intero sistema di chat globale in tempo reale.", { x: 8.2, y: 1.8, w: 3.8, h: 4.0, fontSize: 12, color: accentGold });
+
+            // Slide 9: Conferma Empirica MSN
+            let s9 = pptx.addSlide();
+            s9.background = { color: lightBg };
+            addHeader(s9, "Conferma Empirica su MSN");
+            s9.addText("La distanza media misurata nel 2008 è di:\n\n                       6.6 Passaggi", { x: 0.8, y: 1.8, w: 5.5, h: 4.0, fontSize: 18, color: accentTeal, bold: true });
+            s9.addText("Confronto con Milgram:\nIl risultato (6.6) è incredibilmente vicino al valore ipotizzato da Milgram, validando definitivamente la teoria su un dataset miliardi di volte più grande.\n\nRobustezza:\nLa rete si è rivelata estremamente connessa: il 99.9% degli utenti appartiene alla componente gigante globale, escludendo l'esistenza di sacche isolate rilevanti.", { x: 6.8, y: 1.8, w: 5.2, h: 4.0, fontSize: 14, color: darkText });
+
+            // Slide 10: Introduzione all'Omofilia
+            let s11 = pptx.addSlide();
+            s11.background = { color: darkBg };
+            addHeader(s11, "Introduzione all'Omofilia", true);
+            s11.addText("\"L'individuo tende a creare relazioni preferenziali con soggetti simili a lui.\"", { x: 0.8, y: 1.8, w: 11.2, h: 1.0, fontSize: 22, color: 'FFFFFF', italic: true });
+            s11.addText("• Platone (Liside):\n\"La somiglianza genera la vera amicizia.\"\n\n• Aristotele (Etica Nicomachea):\n\"Si amano coloro che sono simili.\"", { x: 0.8, y: 3.2, w: 11.2, h: 3.0, fontSize: 15, color: accentGold });
+
+            // Slide 11: Omofilia nei Social Network
+            let s12 = pptx.addSlide();
+            s12.background = { color: lightBg };
+            addHeader(s12, "Omofilia nei Social Network");
+            s12.addText("• Formazione di Cluster:\nGruppi con altissima densità interna di connessioni e una bassissima densità verso l'esterno.\n\n• Esempio Scolastico:\nAmicizie fortemente basate sull'anno di corso, sulla classe, sugli hobby o sullo sport praticato.\n\n• Community Detection:\nGli algoritmi moderni identificano gruppi omogenei all'interno dei social basandosi sulle caratteristiche latenti degli utenti.", { x: 0.8, y: 1.8, w: 6.5, h: 4.5, fontSize: 14, color: darkText });
+            s12.addImage({ path: "https://www.tandfonline.com/cms/asset/9c8f5579-19e1-4036-bc75-2ce72a125c5e/frfs_a_2107632_f0001_oc.jpg", x: 7.8, y: 1.8, w: 4.2, h: 4.2 });
+
+            // Slide 12: Conseguenze dell'Omofilia
+            let s13 = pptx.addSlide();
+            s13.background = { color: lightBg };
+            addHeader(s13, "Conseguenze dell'Omofilia");
+            s13.addText("POLARIZZAZIONE\nAllontanamento graduale delle opinioni collettive verso estremi opposti.", { x: 0.8, y: 1.8, w: 3.5, h: 4.0, fontSize: 13, color: '334155', bold: true });
+            s13.addText("ECHO CHAMBERS\nAmbienti digitali in cui l'utente ascolta solo la ripetizione e conferma delle proprie idee.", { x: 4.7, y: 1.8, w: 3.5, h: 4.0, fontSize: 13, color: '334155', bold: true });
+            s13.addText("SEGREGAZIONE\nFrammentazione informativa che limita l'accesso a fonti diverse ed esterne.", { x: 8.6, y: 1.8, w: 3.5, h: 4.0, fontSize: 13, color: '334155', bold: true });
+
+            // Slide 13: Esempio di Calcolo
+            let s14 = pptx.addSlide();
+            s14.background = { color: lightBg };
+            addHeader(s14, "Esempio Pratico di Calcolo");
+            s14.addText("Nodi Totali: 7\nMaschi (p): 4/7\nFemmine (q): 3/7\nArchi Totali: 9\nArchi Osservati (Misti): 2", { x: 0.8, y: 1.8, w: 5.0, h: 4.0, fontSize: 14, color: darkText });
+            s14.addText("PROBABILITÀ ATTESA\n\nIn una rete priva di preferenze (modello nullo), la probabilità di un arco misto è:\n\n             2pq = 2 * (4/7) * (3/7) ≈ 0.49\n\nArchi misti attesi teorici: 0.49 * 9 ≈ 4.4\n\nSiccome gli Archi Osservati (2) < Attesi (4.4), è matematicamente provata la presenza di forze omofile.", { x: 6.2, y: 1.8, w: 5.8, h: 4.0, fontSize: 13, color: '334155' });
+
+            // Slide 14: Network Assortativity
+            let s15 = pptx.addSlide();
+            s15.background = { color: lightBg };
+            addHeader(s15, "Network Assortativity");
+            s15.addText("Tendenza sistematica dei nodi a connettersi con altri nodi che presentano caratteristiche simili (Assortative Mixing):\n\n• Interessi:\nPreferenze musicali, politiche, sportive.\n\n• Lingua:\nUna barriera naturale geografica che crea inevitabilmente cluster linguistici chiusi.\n\n• Attività:\nColleghi di lavoro o compagni di corso universitari.\n\n• Caratteristiche demografiche:\nEtà, genere, etnia.", { x: 0.8, y: 1.8, w: 11.2, h: 4.5, fontSize: 14, color: darkText });
+
+            // Slide 15: Influence vs Homophily
+            let s16 = pptx.addSlide();
+            s16.background = { color: lightBg };
+            addHeader(s16, "Influence vs Homophily");
+            s16.addText("HOMOPHILY (SELEZIONE)\n\"Uccelli dello stesso piumaggio volano insieme.\"\n\nLe persone scelgono attivamente amici simili a loro. La somiglianza precede temporalmente la connessione.", { x: 0.8, y: 1.8, w: 5.2, h: 4.5, fontSize: 14, color: darkText });
+            s16.addText("INFLUENCE (CONTAGIO)\n\"Sei la media delle 5 persone che frequenti di più.\"\n\nLe persone cambiano comportamento per adattarsi ed essere accettate dai loro amici. La connessione precede temporalmente la somiglianza.", { x: 6.5, y: 1.8, w: 5.5, h: 4.5, fontSize: 14, color: '334155' });
+
+            // Slide 16: Tabella Comparativa
+            let s17 = pptx.addSlide();
+            s17.background = { color: lightBg };
+            addHeader(s17, "Tabella Comparativa");
+            s17.addTable([
+                [{ text: "Meccanismo", options: { bold: true, fill: "334155", color: "FFFFFF" } }, { text: "Processo", options: { bold: true, fill: "334155", color: "FFFFFF" } }, { text: "Effetto sulla Rete", options: { bold: true, fill: "334155", color: "FFFFFF" } }],
+                ["Omofilia", "Selezione Sociale", "Crea cluster locali basati su attributi pre-esistenti."],
+                ["Influenza", "Contagio Sociale", "Omogeneizza i comportamenti all'interno di cluster già esistenti."],
+                ["Assortatività", "Mixing Strutturale", "Modifica la topologia globale (es. hub connessi tra loro)."]
+            ], { x: 0.8, y: 1.8, w: 11.2, colW: [2.5, 3.0, 5.7], rowH: 0.8, fontSize: 12 });
+
+            // Slide 17: Analisi Quantitativa
+            let s18 = pptx.addSlide();
+            s18.background = { color: darkBg };
+            addHeader(s18, "Analisi Quantitativa", true);
+            s18.addText("Come misurarla?\n\nAttraverso il coefficiente di modularità e il coefficiente di correlazione di Pearson tra i gradi dei nodi collegati.\n\n• Modelli Nulli:\nConfronto rigoroso con reti casuali equivalenti (Configuration Model).\n\n• Dati Temporali:\nNecessari per distinguere in modo certo tra l'effetto di influenza e quello di omofilia.", { x: 0.8, y: 1.8, w: 11.2, h: 4.5, fontSize: 15, color: 'CBD5E1' });
+
+            // Slide 18: Definizioni di Base
+            let s19 = pptx.addSlide();
+            s19.background = { color: lightBg };
+            addHeader(s19, "Definizioni di Base");
+            s19.addText("• Grafo G(V,E):\nV: Insieme dei nodi.\nE: Insieme degli archi.\nm: Numero totale di archi.\n\n• Adiacenza (A_ij):\n1 se i e j sono connessi, 0 altrimenti.\n\n• Attributi t(v_i):\nCaratteristica discreta associata a ciascun nodo i.", { x: 0.8, y: 1.8, w: 11.2, h: 4.5, fontSize: 15, color: darkText });
+
+            // Slide 19: Delta di Kronecker
+            let s20 = pptx.addSlide();
+            s20.background = { color: lightBg };
+            addHeader(s20, "Delta di Kronecker");
+            s20.addText("Per contare con precisione gli archi presenti tra nodi del medesimo tipo categoriale:\n\n                 Σ A_ij * δ(t_v_i, t_v_j)\n\nDove la Delta di Kronecker δ vale 1 se gli attributi sono uguali, 0 altrimenti.", { x: 0.8, y: 1.8, w: 11.2, h: 4.5, fontSize: 15, color: darkText });
+
+            // Slide 20: Probabilità Casuale
+            let s21 = pptx.addSlide();
+            s21.background = { color: lightBg };
+            addHeader(s21, "Probabilità Casuale");
+            s21.addText("In un modello totalmente casuale (Configuration Model), la probabilità attesa che esista un arco tra il nodo i (grado k_i) e il nodo j (grado k_j) è proporzionale al prodotto dei loro gradi:\n\n                    P_ij = (k_i * k_j) / 2m", { x: 0.8, y: 1.8, w: 11.2, h: 4.5, fontSize: 15, color: darkText });
+
+            // Slide 21: Modularità (Q)
+            let s22 = pptx.addSlide();
+            s22.background = { color: lightBg };
+            addHeader(s22, "Modularità (Q)");
+            s22.addText("Q = (1/2m) * Σ [ A_ij - (k_i * k_j)/2m ] * δ(c_i, c_j)\n\n• Q > 0:\nConnessioni interne alla comunità molto più frequenti rispetto al caso casuale.\n\n• Q = 0:\nStruttura della rete non differente da un grafo casuale neutro.\n\n• Q < 0:\nRete disassortativa (i nodi simili si evitano sistematicamente).", { x: 0.8, y: 1.8, w: 11.2, h: 4.5, fontSize: 14, color: darkText });
+
+            // Slide 22: Forma Matriciale
+            let s23 = pptx.addSlide();
+            s23.background = { color: lightBg };
+            addHeader(s23, "Forma Matriciale");
+            s23.addText("• Indicator Matrix S:\nMatrice di dimensione (N * Gruppi), dove S_ig = 1 se il nodo i appartiene al gruppo g, 0 altrimenti.\n\n• Matrice di Modularità B:\nB_ij = A_ij - (k_i * k_j) / 2m", { x: 0.8, y: 1.8, w: 11.2, h: 4.5, fontSize: 15, color: darkText });
+
+            // Slide 23: Normalizzazione
+            let s24 = pptx.addSlide();
+            s24.background = { color: lightBg };
+            addHeader(s24, "Normalizzazione");
+            s24.addText("Per confrontare reti diverse, si usa spesso la traccia della matrice risultante:\n\n                 Q = (1/2m) * Tr( S^T * B * S )\n\n• S^T: Trasposta della matrice indicatori.\n• B: Modularity Matrix.\n• Tr: Somma degli elementi sulla diagonale (Traccia).", { x: 0.8, y: 1.8, w: 11.2, h: 4.5, fontSize: 15, color: darkText });
+
+            // Slide 24: Analisi dei Risultati
+            let s25 = pptx.addSlide();
+            s25.background = { color: lightBg };
+            addHeader(s25, "Analisi dei Risultati");
+            s25.addTable([
+                [{ text: "Tipo di Rete", options: { bold: true, fill: "334155", color: "FFFFFF" } }, { text: "Valore Q tipico", options: { bold: true, fill: "334155", color: "FFFFFF" } }, { text: "Significato", options: { bold: true, fill: "334155", color: "FFFFFF" } }],
+                ["Rete Sociale (Amicizie)", "0.3 - 0.7", "Forte omofilia e assortatività."],
+                ["Reti Biologiche (Proteine)", "-0.1 - 0.1", "Quasi casuali o disassortative."],
+                ["Rete Internet (AS level)", "< 0", "Hub connesse a piccoli nodi (Disassortativa)."]
+            ], { x: 0.8, y: 1.8, w: 11.2, colW: [3.2, 2.5, 5.5], rowH: 0.8, fontSize: 11 });
+
+            // Slide 25: Parte II: Rete Scale-Free
+            let s26 = pptx.addSlide();
+            s26.background = { color: darkBg };
+            addHeader(s26, "Parte II", true);
+            s26.addText("Simulazione di una Rete Scale-Free\n\nObiettivo: Modellare la crescita di una rete mediante l'algoritmo Barabási-Albert.", { x: 0.8, y: 1.8, w: 11.2, h: 3.5, fontSize: 24, color: 'FFFFFF', bold: true });
+
+            // Slide 26: Algoritmo B-A
+            let s27 = pptx.addSlide();
+            s27.background = { color: lightBg };
+            addHeader(s27, "Algoritmo Barabási-Albert");
+            s27.addText("Preferential Attachment:\n\nMeccanismo \"Rich Get Richer\": i nodi con molte connessioni hanno una probabilità maggiore di riceverne altre.\n\n                 Π(k_i) = k_i / Σ k_j\n\n• Crescita: La rete si espande aggiungendo un nodo alla volta.\n• Hub: Emergono naturalmente pochi nodi centrali con grado altissimo.", { x: 0.8, y: 1.8, w: 6.5, h: 4.5, fontSize: 13, color: darkText });
+            s27.addImage({ path: "https://upload.wikimedia.org/wikipedia/commons/3/3b/Degree_distribution_for_a_network_with_150000_vertices_and_mean_degree_%3D_6_created_using_the_Barabasi-Albert_model.png", x: 7.8, y: 1.8, w: 4.2, h: 4.2 });
+
+            // Slide 27: Analisi Codice
+            let s28 = pptx.addSlide();
+            s28.background = { color: darkBg };
+            addHeader(s28, "Analisi del Codice Python", true);
+            s28.addText("La simulazione definisce una classe SocialHubNetwork che genera e disegna un grafo di Barabási-Albert:\n\n• init: Crea la rete con n nodi e m archi per ogni nuovo nodo.\n• spring_layout: Algoritmo a molla per spingere gli hub al centro della rappresentazione.\n• node_sizes: Scala visiva proporzionale alla centralità del nodo.\n• path length: Calcola quanto è \"piccolo\" il mondo simulato.", { x: 0.8, y: 1.8, w: 11.2, h: 4.5, fontSize: 14, color: 'CBD5E1' });
+
+            // Slide 28: Risultati della Simulazione
+            let s29 = pptx.addSlide();
+            s29.background = { color: lightBg };
+            addHeader(s29, "Risultati della Simulazione");
+            s29.addText("• Scale-Free: La distribuzione dei gradi segue perfettamente una legge di potenza.\n\n• Hub Spontanei: Si formano centri di aggregazione ad altissima densità senza regole centralizzate.\n\n• Diffusione: Gli hub riducono drasticamente l'Average Path Length (il cammino medio geodetico della rete).", { x: 0.8, y: 1.8, w: 6.5, h: 4.5, fontSize: 14, color: darkText });
+            s29.addImage({ path: "https://media.geeksforgeeks.org/wp-content/uploads/barabasi2final.jpg", x: 7.8, y: 1.8, w: 4.2, h: 4.2 });
+
+            // Slide 29: Schema Concettuale Finale
+            let s30 = pptx.addSlide();
+            s30.background = { color: darkBg };
+            addHeader(s30, "Schema Concettuale Finale", true);
+            s30.addText("Small World (Fondamenta) -> Omofilia (Comportamento) -> Assortativity (Struttura) -> BA Algorithm (Simulazione) -> Hubs (Risultato)\n\nIl progetto dimostra come regole locali molto semplici (Preferential Attachment) producano proprietà globali complesse auto-organizzate (Scale-Free Network).", { x: 0.8, y: 1.8, w: 11.2, h: 4.5, fontSize: 16, color: 'FFFFFF', bold: true });
+
+            // Slide 30: Conclusioni & Bibliografia
+            let s31 = pptx.addSlide();
+            s31.background = { color: lightBg };
+            addHeader(s31, "Conclusioni & Bibliografia");
+            s31.addText("Takeaways:\n• Il \"Piccolo Mondo\" è una proprietà universale dei sistemi complessi.\n• L'omofilia guida la formazione dei cluster sociali.\n• Le reti scale-free sono robuste ma vulnerabili agli attacchi mirati agli hub.\n\nBibliografia:\n• S. Milgram (1967). \"The Small World Problem\"\n• J. Leskovec & E. Horvitz (2008). \"Worldwide Buzz\"\n• Barabási & Albert (1999). \"Emergence of Scaling\"", { x: 0.8, y: 1.8, w: 11.2, h: 4.5, fontSize: 13, color: darkText });
+
+            // Slide 31: Fonti Parte I
+            let s32 = pptx.addSlide();
+            s32.background = { color: lightBg };
+            addHeader(s32, "Fonti delle Immagini — Parte I");
+            s32.addText("1. Visualizzazione Rete Sociale: www.puppygraph.com\n2. Sei Gradi Schema: estimy.com\n3. Sei Gradi Separazione SVG: wikipedia.org\n4. MSN Windows XP Mockup: stackoverflow.com", { x: 0.8, y: 1.8, w: 11.2, h: 4.5, fontSize: 14, color: '334155' });
+
+            // Slide 32: Fonti Parte II
+            let s33 = pptx.addSlide();
+            s33.background = { color: lightBg };
+            addHeader(s33, "Fonti delle Immagini — Parte II");
+            s33.addText("5. Cluster Politici Omofili: tandfonline.com\n6. Grado BA Legge di Potenza: wikipedia.org\n7. Grafo BA Simulazione: geeksforgeeks.org", { x: 0.8, y: 1.8, w: 11.2, h: 4.5, fontSize: 14, color: '334155' });
+
+            // Write presentation out to a file
+            pptx.writeFile({ fileName: "Presentazione_Sistemi_Complessi.pptx" });
+        }
+    </script>
+</body>
+</html>
